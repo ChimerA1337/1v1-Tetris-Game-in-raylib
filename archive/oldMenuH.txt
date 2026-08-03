@@ -1,0 +1,56 @@
+#ifndef MENU_H
+#define MENU_H
+
+
+#include "raylib.h"
+
+typedef enum WhichMenu {
+    mainMenu,
+    onlineMenu,
+    settingsMenu,
+    playGame,
+    fullExit
+} WhichMenu;
+
+typedef struct MenuButton {
+    Rectangle rect;
+    Color color;
+
+    Vector2 textPos;
+    const char *text;
+    Font font;
+    float fontSize;
+    Color textColor;
+    float spacing;
+
+    bool extendLeft;
+} MenuButton;
+
+typedef struct MenuState {
+    WhichMenu menu;
+    MenuButton *mainMenuButtons;
+    MenuButton *onlineMenuButtons;
+    MenuButton *settingsMenuButtons;
+} MenuState;
+
+void runMainMenu(Settings *settings, MenuState *menuState);
+void runOnlineMenu(Settings *settings, MenuState *menuState);
+void runSettingsMenu(Settings *settings, MenuState *menuState);
+
+void drawButton(Settings *settings, MenuButton *button);
+
+MenuState *createMenuState(Settings *settings);
+void freeMenuState(MenuState *menuState);
+
+MenuButton createExitButton(Settings *settings);
+
+MenuButton createSoloButton(Settings *settings);
+MenuButton createOnlineButton(Settings *settings);
+MenuButton createSettingsButton(Settings *settings);
+
+MenuButton createSaveButton(Settings *settings);
+
+bool isMouseOnButton(MenuButton *button);
+void highlightButton(MenuButton *button);
+
+#endif

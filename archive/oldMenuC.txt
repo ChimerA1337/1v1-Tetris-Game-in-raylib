@@ -1,0 +1,226 @@
+#include "../include/settings.h"
+#include "raylib.h"
+#include "../include/menu.h"
+#include <stdlib.h>
+//#include <stdio.h>
+#include "../include/definitions.h"
+
+void runMainMenu(Settings *settings, MenuState *menuState) {
+    for(int i = 0; i < 4; i++) {
+        if(isMouseOnButton(&menuState->mainMenuButtons[i])) {
+            highlightButton(&menuState->mainMenuButtons[i]);
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                switch(i) {
+                    case 0:
+                        menuState->menu = fullExit;
+                        break;
+                    case 1:
+                        menuState->menu = playGame;
+                        break;
+                    case 2:
+                        menuState->menu = onlineMenu;
+                        break;
+                    case 3:
+                        menuState->menu = settingsMenu;
+                        break;
+                }
+            }
+        }
+        else if(menuState->mainMenuButtons[i].rect.x < 600 && menuState->mainMenuButtons[i].extendLeft) {
+            menuState->mainMenuButtons[i].rect.x+=20;
+            menuState->mainMenuButtons[i].textPos.x+=20;
+        }
+        drawButton(settings, &menuState->mainMenuButtons[i]);
+    }
+}
+
+void runOnlineMenu(Settings *settings, MenuState *menuState) {
+    for(int i = 0; i < 1; i++) {
+        if(isMouseOnButton(&menuState->settingsMenuButtons[i])) {
+            highlightButton(&menuState->settingsMenuButtons[i]);
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                switch(i) {
+                    case 0:
+                        menuState->menu = mainMenu;
+                        break;
+                }
+            }
+        }
+        else if(menuState->settingsMenuButtons[i].rect.x < 600 && menuState->settingsMenuButtons[i].extendLeft) {
+            menuState->settingsMenuButtons[i].rect.x+=20;
+            menuState->settingsMenuButtons[i].textPos.x+=20;
+        }
+        drawButton(settings, &menuState->settingsMenuButtons[i]);
+    }
+}
+
+void runSettingsMenu(Settings *settings, MenuState *menuState) {
+    for(int i = 0; i < 2; i++) {
+        if(isMouseOnButton(&menuState->settingsMenuButtons[i])) {
+            highlightButton(&menuState->settingsMenuButtons[i]);
+            if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                switch(i) {
+                    case 0:
+                        menuState->menu = mainMenu;
+                        break;
+                    case 1:
+                        saveSettings(settings, "data/settings.txt");
+                        break;
+                }
+            }
+        }
+        else if(menuState->settingsMenuButtons[i].rect.x < 600 && menuState->settingsMenuButtons[i].extendLeft) {
+            menuState->settingsMenuButtons[i].rect.x+=20;
+            menuState->settingsMenuButtons[i].textPos.x+=20;
+        }
+        drawButton(settings, &menuState->settingsMenuButtons[i]);
+    }
+}
+
+MenuState *createMenuState(Settings *settings) {
+    MenuState *menuState = malloc(sizeof(MenuState));
+    menuState->mainMenuButtons = malloc(sizeof(MenuButton) * 4);
+    menuState->onlineMenuButtons = malloc(sizeof(MenuButton) * 1);
+    menuState->settingsMenuButtons = malloc(sizeof(MenuButton) * 2);
+
+    menuState->mainMenuButtons[0] = createExitButton(settings);
+    menuState->mainMenuButtons[1] = createSoloButton(settings);
+    menuState->mainMenuButtons[2] = createOnlineButton(settings);
+    menuState->mainMenuButtons[3] = createSettingsButton(settings);
+    
+    menuState->onlineMenuButtons[0] = createExitButton(settings);
+    
+
+    menuState->settingsMenuButtons[0] = createExitButton(settings);
+    menuState->settingsMenuButtons[1] = createSaveButton(settings);
+
+    return menuState;
+}
+
+MenuButton createExitButton(Settings *settings) {
+    MenuButton button;
+    button.color = MAROON_TRANSPARENT;
+    button.rect.x = 0;
+    button.rect.y = 50;
+    button.rect.width = 150;
+    button.rect.height = 50;
+    button.textPos = (Vector2) {0+20, 50 + 20};
+    button.font = GetFontDefault(); // Use a custom font later, smth like roboto or smth
+    button.fontSize = 10;
+    button.textColor = RED;
+    button.text = "Back";
+    button.spacing = 5;
+    button.extendLeft = false;
+
+    return button;
+}
+
+MenuButton createSoloButton(Settings *settings) {
+    MenuButton button;
+    button.color = DARKPURPLE_TRANSPARENT;
+    button.rect.x = 600;
+    button.rect.y = 200;
+    button.rect.width = settings->ScreenWidth - 300;
+    button.rect.height = 100;
+    button.textPos = (Vector2) {600 + 20, 200 + 20};
+    button.font = GetFontDefault(); // Use a custom font later, smth like roboto or smth
+    button.fontSize = 50;
+    button.textColor = VIOLET;
+    button.text = "Play Solo";
+    button.spacing = 5;
+    button.extendLeft = true;
+
+    return button;
+}
+
+MenuButton createOnlineButton(Settings *settings) {
+    MenuButton button;
+    button.color = ORANGE_TRANSPARENT;
+    button.rect.x = 600;
+    button.rect.y = 350;
+    button.rect.width = settings->ScreenWidth - 300;
+    button.rect.height = 100;
+    button.textPos = (Vector2) {600 + 20, 350 + 20};
+    button.font = GetFontDefault(); // Use a custom font later, smth like roboto or smth
+    button.fontSize = 50;
+    button.textColor = YELLOW;
+    button.text = "Play Online";
+    button.spacing = 5;
+    button.extendLeft = true;
+
+    return button;
+}
+
+MenuButton createSettingsButton(Settings *settings) {
+    MenuButton button;
+    button.color = DARKGRAY_TRANSPARENT;
+    button.rect.x = 600;
+    button.rect.y = 500;
+    button.rect.width = settings->ScreenWidth - 300;
+    button.rect.height = 100;
+    button.textPos = (Vector2) {600 + 20, 500 + 20};
+    button.font = GetFontDefault(); // Use a custom font later, smth like roboto or smth
+    button.fontSize = 50;
+    button.textColor = LIGHTGRAY;
+    button.text = "Settings";
+    button.spacing = 5;
+    button.extendLeft = true;
+
+    return button;
+}
+
+MenuButton createSaveButton(Settings *settings) {
+    MenuButton button;
+    button.color = BLUE_TRANSPARENT;
+    button.rect.x = 600;
+    button.rect.y = 700;
+    button.rect.width = settings->ScreenWidth - 300;
+    button.rect.height = 100;
+    button.textPos = (Vector2) {600 + 20, 700 + 20};
+    button.font = GetFontDefault(); // Use a custom font later, smth like roboto or smth
+    button.fontSize = 50;
+    button.textColor = SKYBLUE;
+    button.text = "Save";
+    button.spacing = 5;
+    button.extendLeft = true;
+
+    return button;
+}
+
+void drawButton(Settings *settings, MenuButton *button) {
+    DrawRectangleRec(button->rect, button->color);
+    DrawRectangleLinesEx(button->rect, settings->OutlineThickness, button->textColor);
+    DrawTextEx(
+        button->font,
+        button->text,
+        button->textPos,
+        button->fontSize,
+        button->spacing,
+        button->textColor
+    );
+}
+
+bool isMouseOnButton(MenuButton *button) {
+    if(
+        GetMouseX() > button->rect.x &&
+        GetMouseX() < button->rect.x + button->rect.width &&
+        GetMouseY() > button->rect.y &&
+        GetMouseY() < button->rect.y + button->rect.height
+) return true;
+return false;
+}
+
+void highlightButton(MenuButton *button) {
+    DrawRectangleRec(button->rect, TRANSPARENT_WHITE);
+    if(button->rect.x > 400 && button->extendLeft) {
+        button->rect.x-=20;
+        button->textPos.x-=20;
+    }
+}
+
+void freeMenuState(MenuState *menuState) {
+    free(menuState->mainMenuButtons);
+    free(menuState->onlineMenuButtons);
+    free(menuState->settingsMenuButtons);
+    free(menuState);
+}
