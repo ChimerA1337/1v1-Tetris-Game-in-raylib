@@ -24,6 +24,7 @@ MenuState *createMenuState(GameState *gameState, Settings *settings) {
     menuState->joinIpBuffer[0] = '\0';
     menuState->joinIpLength = 0;
     menuState->getUser = false;
+    menuState->isHosting = false;
 
     menuState->mainMenu = createMainMenu();
     menuState->onlineMenu = createOnlineMenu();
@@ -197,16 +198,18 @@ void handleMenus(MenuState *menuState) {
                     menuState->whichMenu = mainMenu;
                 if(oMenu->host->button->isMouseOnTop(oMenu->host->button)) {
                     menuState->promptHost = true;
+                    menuState->isHosting = true;
                     menuState->whichMenu = lobbyMenu;
                     createHost(menuState->gameState->networkState);
                 }
                 if(oMenu->join->button->isMouseOnTop(oMenu->join->button)) {
                     menuState->promptJoin = true;
+                    menuState->isHosting = false;
                 }
             }
             break;
         case lobbyMenu:
-            handleLobbyMenu(lMenu);
+            handleLobbyMenu(menuState);
             drawLobby(menuState);
             promptHost(menuState);
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -214,9 +217,10 @@ void handleMenus(MenuState *menuState) {
                     menuState->whichMenu = onlineMenu;
             }
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                if(lMenu->start->isMouseOnTop(lMenu->start)) 
-                    menuState->whichMenu = multiplayerMenu;
+                if(lMenu->start->isMouseOnTop(lMenu->start) && menuState->isHosting)
+                    sendStart(menuState->gameState);
             }
+            if(!menuState->isHosting) recieveStart(menuState->gameState);
             break;
         case settingsMenu:
             handleSettingsMenu(sMenu);
@@ -293,12 +297,22 @@ void handleOnlineMenu(OnlineMenu *menu) {
     menu->join->extend(menu->join);
 }
 
-void handleLobbyMenu(LobbyMenu *menu) {
-    menu->exit->draw(menu->exit);
-    menu->exit->highlight(menu->exit);
+void handleLobbyMenu(MenuState *menu) {
+    NetworkState *network = menu->gameState->networkState;
 
-    menu->start->draw(menu->start);
-    menu->start->highlight(menu->start);
+    menu->lobbyMenu->exit->draw(menu->lobbyMenu->exit);
+    menu->lobbyMenu->exit->highlight(menu->lobbyMenu->exit);
+
+    int n;
+    if(menu->isHosting) {
+        menu->lobbyMenu->start->draw(menu->lobbyMenu->start);
+        menu->lobbyMenu->start->highlight(menu->lobbyMenu->start);
+
+        if(network->clientUsername[0] == '\0') 
+            n = read(network->socket, network->clientUsername, 24);
+    }
+    else if(network->hostUsername[0] == '\0')
+        n = read(network->socket, network->hostUsername, 24);
 }
 
 void handleSettingsMenu(SettingsMenu *menu) {
@@ -698,7 +712,7 @@ void promptBindingListen(MenuState *menuState) {
 void promptHost(MenuState *menuState) {
     if(!menuState->promptHost) return;
     updateHosting(menuState);
-    menuState->gameState->networkState->username = menuState->onlineMenu->username;
+    menuState->gameState->networkState->hostUsername = menuState->onlineMenu->username;
 
     Rectangle rec = {(float)1600/2 - 300, (float)900/2 - 150, 600, 200};
     DrawRectangleRec(rec, DARKPURPLE_TRANSPARENT);
@@ -752,11 +766,13 @@ void promptJoin(MenuState *menuState) {
 
     // Submit on Enter
     if (IsKeyPressed(KEY_ENTER) && menuState->joinIpLength > 0) {
-        createClient(menuState->gameState->networkState, menuState->joinIpBuffer);
+        NetworkState *network = menuState->gameState->networkState;
+        createClient(network, menuState->joinIpBuffer);
         menuState->promptJoin = false;
         menuState->whichMenu = lobbyMenu;
         
-        menuState->gameState->networkState->username = menuState->onlineMenu->username;
+        network->clientUsername = menuState->onlineMenu->username;
+        send(network->socket, network->clientUsername, strlen(network->clientUsername), 0);
     }
 
     if(IsKeyPressed(KEY_ESCAPE)) menuState->promptJoin = false;
@@ -773,6 +789,15 @@ void updateHosting(MenuState *menuState) {
         setNonBlocking(clientFd); // reads from this socket shouldn't block either
         printf("Client connected!\n");
         menuState->promptHost = false; // e.g. auto-close the "waiting" prompt
+
+        int n = read(clientFd, network->clientUsername, 24); // how does it know size?
+        if(n <= 0) {
+            printf("Failed to read client username from socket.\n");
+            network->clientUsername[0] = '\0'; // Clear the client username on failure
+        } else {
+            network->clientUsername[n] = '\0'; // Null-terminate the string
+        }
+        send(clientFd, network->hostUsername, strlen(network->hostUsername), 0);
     }
     // if clientFd < 0, no one's connected yet this frame — just continue, don't block
 }
@@ -789,8 +814,8 @@ void drawLobby(MenuState *menu) {
     DrawRectangleRec(recChat, DARKGRAY_TRANSPARENT);
     DrawRectangleLinesEx(recChat, 1.5, GRAY);
 
-    DrawText(menu->gameState->networkState->username, 100+20, 150+10, 30, SKYBLUE);
-    DrawText("Example client name", (float) 1600/2 + 100+20, 150+10, 30, YELLOW);
+    DrawText(menu->gameState->networkState->hostUsername, 100+20, 150+10, 30, SKYBLUE);
+    DrawText(menu->gameState->networkState->clientUsername, (float) 1600/2 + 100+20, 150+10, 30, YELLOW);
 }
 
 void getUsername(MenuState *menu) {

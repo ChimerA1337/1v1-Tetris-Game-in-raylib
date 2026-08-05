@@ -22,7 +22,8 @@ typedef struct NetMessage {
 struct NetworkState {
     int connectSocket;
     int socket;
-    char *username;
+    char *hostUsername;
+    char *clientUsername;
     Player player;
 };
 
@@ -36,16 +37,11 @@ void closeSockets(NetworkState *network);
 void freeNetworkState(NetworkState *network);
 
 void sendStart(GameState *gameState);
+void recieveStart(GameState *gameState);
 
-/*
-1. Send inputs
-2. 
-*/
-
-
-// Dont use these theyre for proof of concept
 void sendBoardState(GameState *gameState);
 void recieveBoardState(GameState *gameState);
-/*******************************************/
+
+void lobbyChat(GameState *gameState);
 
 #endif

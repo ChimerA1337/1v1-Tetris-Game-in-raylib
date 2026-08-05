@@ -6,6 +6,7 @@
 
 typedef struct GameState GameState;
 typedef struct MultiplayerMenu MultiplayerMenu;
+typedef struct MenuState MenuState;
 
 typedef enum WhichMenu {
     mainMenu,
@@ -63,7 +64,7 @@ typedef struct LobbyMenu {
     
     MenuButton *start;
 
-    void (*handle) (struct LobbyMenu *self);
+    void (*handle) (struct MenuState *self);
 } LobbyMenu;
 
 typedef struct SettingsMenu {
@@ -99,6 +100,7 @@ typedef struct MenuState {
     bool promptHost;
     bool promptJoin;
     bool getUser;
+    bool isHosting;
     int *bindTarget;
 
     char joinIpBuffer[16];
@@ -147,7 +149,7 @@ void freeMenuState(MenuState *menuState);
 void handleMenus(MenuState *menuState);
     void handleMainMenu(MainMenu *menu);
     void handleOnlineMenu(OnlineMenu *menu);
-    void handleLobbyMenu(LobbyMenu *menu);
+    void handleLobbyMenu(MenuState *menu);
     void handleSettingsMenu(SettingsMenu *menu);
     void handleGamingMenu(GamingMenu *menu);
     void handleMultiplayerMenu(MultiplayerMenu *menu);

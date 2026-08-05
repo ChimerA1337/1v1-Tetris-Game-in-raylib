@@ -37,8 +37,7 @@ int main(void) {
                     drawMino(gameState->ghostMino, settings);
                 }
                 if(gameState->menuState->whichMenu == multiplayerMenu) {
-                    // sendBoardState(gameState);
-                    // recieveBoardState(gameState);
+                    recieveBoardState(gameState);
                     handleInput(gameState, settings);
                     drawBoards(gameState->boards, settings);
                     drawPreviewCol(gameState->previewCol, settings);

@@ -14,7 +14,8 @@ NetworkState *createNetworkState() {
     NetworkState *networkState = malloc(sizeof(NetworkState));
     networkState->connectSocket = -1;
     networkState->socket = -1; // explicitly "no client yet"
-    networkState->username = NULL;
+    networkState->hostUsername = malloc(24 * sizeof(char));
+    networkState->clientUsername = malloc(24 * sizeof(char));
     return networkState;
 }
 
@@ -41,9 +42,6 @@ void createHost(NetworkState *networkState) {
     if (listen(serverFd, 1) < 0) { perror("listen failed"); exit(1); }
 
     setNonBlocking(serverFd); // key change — don't block on accept() later
-
-    printf("Server listening on port %d...\n", PORT);
-    
 }
 
 void createClient(NetworkState *networkState, char *ipString) {
@@ -73,10 +71,7 @@ void createClient(NetworkState *networkState, char *ipString) {
     }
 
     printf("Connected to server!\n");
-
-    // 4. Send a message
-    char *message = "Hello from client!";
-    send(sockFd, message, strlen(message), 0);
+    setNonBlocking(sockFd);
 }
 
 int setNonBlocking(int fd) {
@@ -90,23 +85,26 @@ void closeSockets(NetworkState *network) {
 }
 
 void freeNetworkState(NetworkState *network) {
+    free(network->hostUsername);
+    free(network->clientUsername);
     free(network);
 }
 
 void sendStart(GameState *gameState) {
     NetworkState *network = gameState->networkState;
-
-    switch(network->player) {
-        case server:
-            
-            break;
-        case client:
-            
-            break;
-    }
+    gameState->menuState->whichMenu = multiplayerMenu;
+    send(network->socket, "S", sizeof(char), 0);
 }
 
-// proof of concept, dont use this
+void recieveStart(GameState *gameState) {
+    NetworkState *network = gameState->networkState;
+    char start;
+
+    int n = read(network->socket, &start, sizeof(char));
+    if(n <= 0) return; // no data received, just continue
+    if(start == 'S') gameState->menuState->whichMenu = multiplayerMenu;
+}
+
 void sendBoardState(GameState *gameState) {
     NetworkState *network = gameState->networkState;
     Board *board = gameState->boards->leftBoard;
@@ -136,4 +134,8 @@ void recieveBoardState(GameState *gameState) {
         if (n <= 0) break; // connection closed or error
         totalRead += n;
     }
+}
+
+void lobbyChat(GameState *gameState) {
+
 }

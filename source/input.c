@@ -6,10 +6,14 @@
 #include "../include/rotation.h"
 #include "../include/settings.h"
 #include "../include/hold.h"
+#include "../include/network.h"
 //#include <stdio.h>
 
 void handleInput(GameState *gameState, Settings *settings) {
-    if(IsKeyPressed(settings->HardDrop)) spawnMino(gameState, settings);
+    if(IsKeyPressed(settings->HardDrop)) {
+        spawnMino(gameState, settings);
+        sendBoardState(gameState);
+    }
     if(IsKeyPressed(settings->SoftDrop)) softDrop(gameState, settings);
     if(IsKeyPressed(settings->Hold)) hold(gameState, settings);
 
