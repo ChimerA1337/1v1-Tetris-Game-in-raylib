@@ -5,6 +5,6 @@
 #include "randomizer.h"
 #include "gameState.h"
 
-void handleInput(GameState *gameState, Settings *settings);
+void handleInput(GameState *gameState);
 
 #endif

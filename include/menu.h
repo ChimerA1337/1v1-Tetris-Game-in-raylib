@@ -116,7 +116,7 @@ typedef struct MenuState {
     void (*handle) (struct MenuState *self);
 } MenuState;
 
-MenuState *createMenuState(GameState *gameState, Settings *settings);
+MenuState *createMenuState(GameState *gameState);
     MenuButton *createExitButton();
     MainMenu *createMainMenu();
         MenuButtonExtend *createSoloButton();
@@ -162,6 +162,5 @@ void extendButton(MenuButtonExtend *extendButton);
 void promptBindingListen(MenuState *menuState);
 void promptHost(MenuState *menuState);
 void promptJoin(MenuState *menuState);
-void updateHosting(MenuState *menuState);
 
 #endif

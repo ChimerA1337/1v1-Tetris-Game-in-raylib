@@ -128,14 +128,16 @@ void clearMino(Mino *mino, Color boardColor) {
     mino->block3->color = boardColor;
 }
 
-void correctMinoPos(GameState *gameState, int blockSize) {
+void correctMinoPos(GameState *gameState) {
+    int blockSize = gameState->settings->BlockSize;
     correctBlockPos(gameState->boards->leftBoard, gameState->mino->anchor, blockSize);
     correctBlockPos(gameState->boards->leftBoard, gameState->mino->block1, blockSize);
     correctBlockPos(gameState->boards->leftBoard, gameState->mino->block2, blockSize);
     correctBlockPos(gameState->boards->leftBoard, gameState->mino->block3, blockSize);
 }
 
-void correctMinoPosGhost(GameState *gameState, int blockSize) {
+void correctMinoPosGhost(GameState *gameState) {
+    int blockSize = gameState->settings->BlockSize;
     correctBlockPos(gameState->boards->leftBoard, gameState->ghostMino->anchor, blockSize);
     correctBlockPos(gameState->boards->leftBoard, gameState->ghostMino->block1, blockSize);
     correctBlockPos(gameState->boards->leftBoard, gameState->ghostMino->block2, blockSize);

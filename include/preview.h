@@ -26,4 +26,5 @@ void drawPreviewCol(PreviewCol *previewCol, Settings *settings);
 void drawPreview(Settings *settings, Preview *preview);
 
 void updatePreviewCol(PreviewCol *previewCol, Bags *bags);
+
 #endif

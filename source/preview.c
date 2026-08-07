@@ -47,8 +47,6 @@ Preview createPreview(Settings *settings, int i) {
     preview.rect.width = 3*blockSize;
     preview.rect.height = 3*blockSize;
 
-    //preview.mino xyz
-
     return preview;
 }
 
@@ -98,4 +96,3 @@ void updatePreviewCol(PreviewCol *previewCol, Bags *bags) {
         preview->minoType = (MinoType)peekBag(bags, i);
     }
 }
-

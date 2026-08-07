@@ -24,34 +24,34 @@ void rotateRightMinoS(Mino *mino);
 void rotateRightMinoZ(Mino *mino);
 void rotateRightMinoI(Mino *mino);
 
-bool isRotationLegal(GameState *gameState, Settings *settings);
+bool isRotationLegal(GameState *gameState);
 
-void rotateLeft(GameState *gameState, Settings *settings);
-void rotateRight(GameState *gameState, Settings *settings);
-void rotate180(GameState *gameState, Settings *settings);
+void rotateLeft(GameState *gameState);
+void rotateRight(GameState *gameState);
+void rotate180(GameState *gameState);
 
-void rotateLeftJLTSZ(GameState *gameState, Settings *settings);
-void rotateLeftI(GameState *gameState, Settings *settings);
+void rotateLeftJLTSZ(GameState *gameState);
+void rotateLeftI(GameState *gameState);
 
-void rotateRightJLTSZ(GameState *gameState, Settings *settings);
-void rotateRightI(GameState *gameState, Settings *settings);
+void rotateRightJLTSZ(GameState *gameState);
+void rotateRightI(GameState *gameState);
 
-bool leftTestsJLTSZRot0(GameState *gameState, Settings *settings);
-bool leftTestsJLTSZRotR(GameState *gameState, Settings *settings);
-bool leftTestsJLTSZRot2(GameState *gameState, Settings *settings);
-bool leftTestsJLTSZRotL(GameState *gameState, Settings *settings);
-bool leftTestsIRot0(GameState *gameState, Settings *settings);
-bool leftTestsIRotR(GameState *gameState, Settings *settings);
-bool leftTestsIRot2(GameState *gameState, Settings *settings);
-bool leftTestsIRotL(GameState *gameState, Settings *settings);
+bool leftTestsJLTSZRot0(GameState *gameState);
+bool leftTestsJLTSZRotR(GameState *gameState);
+bool leftTestsJLTSZRot2(GameState *gameState);
+bool leftTestsJLTSZRotL(GameState *gameState);
+bool leftTestsIRot0(GameState *gameState);
+bool leftTestsIRotR(GameState *gameState);
+bool leftTestsIRot2(GameState *gameState);
+bool leftTestsIRotL(GameState *gameState);
 
-bool rightTestsJLTSZRot0(GameState *gameState, Settings *settings);
-bool rightTestsJLTSZRotR(GameState *gameState, Settings *settings);
-bool rightTestsJLTSZRot2(GameState *gameState, Settings *settings);
-bool rightTestsJLTSZRotL(GameState *gameState, Settings *settings);
-bool rightTestsIRot0(GameState *gameState, Settings *settings);
-bool rightTestsIRotR(GameState *gameState, Settings *settings);
-bool rightTestsIRot2(GameState *gameState, Settings *settings);
-bool rightTestsIRotL(GameState *gameState, Settings *settings);
+bool rightTestsJLTSZRot0(GameState *gameState);
+bool rightTestsJLTSZRotR(GameState *gameState);
+bool rightTestsJLTSZRot2(GameState *gameState);
+bool rightTestsJLTSZRotL(GameState *gameState);
+bool rightTestsIRot0(GameState *gameState);
+bool rightTestsIRotR(GameState *gameState);
+bool rightTestsIRot2(GameState *gameState);
+bool rightTestsIRotL(GameState *gameState);
 
 #endif

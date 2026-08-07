@@ -11,9 +11,9 @@ typedef struct Hold {
 } Hold;
 
 Hold *createHold(Settings *settings);
-void drawHold(GameState *gameState, Settings *settings);
+void drawHold(GameState *gameState);
 
-void hold(GameState *gameState, Settings *settings);
-void holdNoMino(GameState *gameState, Settings *settings);
+void hold(GameState *gameState);
+void holdNoMino(GameState *gameState);
 
 #endif

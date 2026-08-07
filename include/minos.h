@@ -5,8 +5,11 @@
 #include "raylib.h"
 #include "definitions.h"
 #include "rotation.h"
+#include "settings.h"
 
 typedef struct GameState GameState;
+typedef struct Block Block;
+typedef struct Settings Settings;
 typedef enum Rotation Rotation;
 
 typedef enum MinoType {
@@ -46,7 +49,7 @@ void freeMino(Mino *mino);
 void drawMino(Mino *mino, Settings *settings);
 void clearMino(Mino *mino, Color boardColor);
 
-void correctMinoPos(GameState *gameState, int blockSize);
-void correctMinoPosGhost(GameState *gameState, int blockSize);
+void correctMinoPos(GameState *gameState);
+void correctMinoPosGhost(GameState *gameState);
 
 #endif

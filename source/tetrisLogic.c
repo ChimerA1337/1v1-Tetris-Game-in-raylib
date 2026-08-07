@@ -7,7 +7,7 @@
 #include "../include/preview.h"
 #include "../include/definitions.h"
 
-void spawnMinoNoDelete(GameState *gameState, Settings *settings) {
+void spawnMinoNoDelete(GameState *gameState) {
     switch(getNextMino(gameState->bags->bag1)) {
         case I_MINO:
             gameState->mino = spawnI(gameState->boards->leftBoard);
@@ -35,8 +35,8 @@ void spawnMinoNoDelete(GameState *gameState, Settings *settings) {
     }
 }
 
-void spawnMino(GameState *gameState, Settings *settings) {
-    hardDrop(gameState, settings);
+void spawnMino(GameState *gameState) {
+    hardDrop(gameState);
     freeMino(gameState->mino);
     switch(getNextMino(gameState->bags->bag1)) {
         case I_MINO:
@@ -62,67 +62,67 @@ void spawnMino(GameState *gameState, Settings *settings) {
             break;
         case REFRESH_BAG:
             refreshBags(gameState->bags);
-            spawnMinoNoDelete(gameState, settings);
+            spawnMinoNoDelete(gameState);
             break;
         default:
             printf("\nbag gave a mino out of scope. ");
     }
     updatePreviewCol(gameState->previewCol, gameState->bags);
-    spawnGhostMino(gameState, settings);
+    spawnGhostMino(gameState);
 }
 
-void spawnGhostMinoNoDelete(GameState *gameState, Settings *settings) {
+void spawnGhostMinoNoDelete(GameState *gameState) {
     Mino *ghostMino = copyMino(gameState->mino);
 
-    ghostMino->color = ColorAlpha(ghostMino->color, settings->GhostMinoAlpha);
+    ghostMino->color = ColorAlpha(ghostMino->color, gameState->settings->GhostMinoAlpha);
 
     gameState->ghostMino = ghostMino;
-    softDropGhost(gameState, settings);
+    softDropGhost(gameState);
 }
 
-void spawnGhostMino(GameState *gameState, Settings *settings) {
+void spawnGhostMino(GameState *gameState) {
     Mino *ghostMino = copyMino(gameState->mino);
-    clearMino(gameState->ghostMino, settings->BoardColor);
+    clearMino(gameState->ghostMino, gameState->settings->BoardColor);
     freeMino(gameState->ghostMino);
 
-    ghostMino->color = ColorAlpha(ghostMino->color, settings->GhostMinoAlpha);
+    ghostMino->color = ColorAlpha(ghostMino->color,gameState->settings->GhostMinoAlpha);
 
     gameState->ghostMino = ghostMino;
-    softDropGhost(gameState, settings);
+    softDropGhost(gameState);
 }
 
-void hardDrop(GameState *gameState, Settings *settings) {
-    softDrop(gameState, settings);
+void hardDrop(GameState *gameState) {
+    softDrop(gameState);
     commitMinoToBoard(gameState);
-    clearLines(gameState, settings);
+    clearLines(gameState);
 }
 
-void softDrop(GameState *gameState, Settings *settings) {
-    dropMino(gameState, settings);
-    correctMinoPos(gameState, settings->BlockSize);
+void softDrop(GameState *gameState) {
+    dropMino(gameState);
+    correctMinoPos(gameState);
 }
 
-void dropMino(GameState *gameState, Settings *settings) {
-    if(!isDownLegal(gameState, settings->GridHeight)) {
+void dropMino(GameState *gameState) {
+    if(!isDownLegal(gameState)) {
         moveMinoY(gameState->mino, -1);
         return;
     }
     moveMinoY(gameState->mino, 1);
-    dropMino(gameState, settings);
+    dropMino(gameState);
 }
 
-void softDropGhost(GameState *gameState, Settings *settings) {
-    dropMinoGhost(gameState, settings);
-    correctMinoPosGhost(gameState, settings->BlockSize);
+void softDropGhost(GameState *gameState) {
+    dropMinoGhost(gameState);
+    correctMinoPosGhost(gameState);
 }
 
-void dropMinoGhost(GameState *gameState, Settings *settings) {
-    if(!isDownLegalGhost(gameState, settings->GridHeight)) {
+void dropMinoGhost(GameState *gameState) {
+    if(!isDownLegalGhost(gameState)) {
         moveMinoY(gameState->ghostMino, -1);
         return;
     }
     moveMinoY(gameState->ghostMino, 1);
-    dropMinoGhost(gameState, settings);
+    dropMinoGhost(gameState);
 }
 
 void commitMinoToBoard(GameState *gameState) {
@@ -154,48 +154,48 @@ void moveMinoX(Mino *mino, int x) {
     mino->block3->x+=x;
 }
 
-void moveLeft(GameState *gameState, Settings *settings) {
+void moveLeft(GameState *gameState) {
     moveMinoX(gameState->mino, -1);
     if(!isLeftLegal(gameState))
         moveMinoX(gameState->mino, 1);
-    correctMinoPos(gameState, settings->BlockSize);
+    correctMinoPos(gameState);
 
     copyMinoPosition(gameState->mino, gameState->ghostMino);
-    softDropGhost(gameState, settings);
+    softDropGhost(gameState);
 }
 
-void moveLeftDAS(GameState *gameState, Settings *settings) {
+void moveLeftDAS(GameState *gameState) {
     if(!isLeftLegal(gameState)) {
         moveMinoX(gameState->mino, 1);
-        correctMinoPos(gameState, settings->BlockSize);
+        correctMinoPos(gameState);
         copyMinoPosition(gameState->mino, gameState->ghostMino);
-        softDropGhost(gameState, settings);
+        softDropGhost(gameState);
         return;
     }
     moveMinoX(gameState->mino, -1);
-    moveLeftDAS(gameState, settings);
+    moveLeftDAS(gameState);
 }
 
-void moveRight(GameState *gameState, Settings *settings) {
+void moveRight(GameState *gameState) {
     moveMinoX(gameState->mino, 1);
-    if(!isRightLegal(gameState, settings->GridWidth)) 
+    if(!isRightLegal(gameState)) 
         moveMinoX(gameState->mino, -1);
-    correctMinoPos(gameState, settings->BlockSize);
+    correctMinoPos(gameState);
 
     copyMinoPosition(gameState->mino, gameState->ghostMino);
-    softDropGhost(gameState, settings);
+    softDropGhost(gameState);
 }
 
-void moveRightDAS(GameState *gameState, Settings *settings) {
-    if(!isRightLegal(gameState, settings->GridWidth)) {
+void moveRightDAS(GameState *gameState) {
+    if(!isRightLegal(gameState)) {
         moveMinoX(gameState->mino, -1);
-        correctMinoPos(gameState, settings->BlockSize);
+        correctMinoPos(gameState);
         copyMinoPosition(gameState->mino, gameState->ghostMino);
-        softDropGhost(gameState, settings);
+        softDropGhost(gameState);
         return;
     }
     moveMinoX(gameState->mino, 1);
-    moveRightDAS(gameState, settings);
+    moveRightDAS(gameState);
 }
 
 bool isLocationLegal(GameState *gameState) {
@@ -224,8 +224,9 @@ bool isLocationLegalGhost(GameState *gameState) {
     return true;
 }
 
-bool isDownLegal(GameState *gameState, int gridHeight) {
+bool isDownLegal(GameState *gameState) {
     Mino *mino = gameState->mino;
+    int gridHeight = gameState->settings->GridHeight;
 
     if(!isLocationLegal(gameState)) return false;
     if(
@@ -237,8 +238,9 @@ bool isDownLegal(GameState *gameState, int gridHeight) {
     return true;
 }
 
-bool isDownLegalGhost(GameState *gameState, int gridHeight) {
+bool isDownLegalGhost(GameState *gameState) {
     Mino *mino = gameState->ghostMino;
+    int gridHeight = gameState->settings->GridHeight;
 
     if(!isLocationLegalGhost(gameState)) return false;
     if(
@@ -263,8 +265,9 @@ bool isLeftLegal(GameState *gameState) {
     return true;
 }
 
-bool isRightLegal(GameState *gameState, int gridWidth) {
+bool isRightLegal(GameState *gameState) {
     Mino *mino = gameState->mino;
+    int gridWidth = gameState->settings->GridWidth;
 
     if(!isLocationLegal(gameState)) return false;
     if(
@@ -276,11 +279,11 @@ bool isRightLegal(GameState *gameState, int gridWidth) {
     return true;
 }
 
-void clearLines(GameState *gameState, Settings *settings) {
+void clearLines(GameState *gameState) {
     Board *board = gameState->boards->leftBoard;
-    int width = settings->GridWidth;
-    Color boardColor = settings->BoardColor;
-    for(int i = 0; i < settings->GridHeight; i++) {
+    int width = gameState->settings->GridWidth;
+    Color boardColor = gameState->settings->BoardColor;
+    for(int i = 0; i < gameState->settings->GridHeight; i++) {
         if(isLineFull(board, width, i)) 
             clearLine(board, width, i, boardColor);
     }

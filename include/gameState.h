@@ -24,9 +24,10 @@ typedef struct GameState {
     Hold *hold;
     MenuState *menuState;
     NetworkState *networkState;
+    Settings *settings;
 } GameState;
 
-GameState *createGameState(Settings *settings);
+GameState *createGameState();
 void freeGameState(GameState *gameState);
 
 #endif

@@ -64,7 +64,7 @@ void loadSettings(Settings *settings, const char *filename) {
     fclose(file);
 
     printf("\nSettings loaded from %s\n", filename);
-    printSettings(settings);
+    //printSettings(settings);
 }
 void saveSettings(Settings *settings, const char *filename) {
     FILE *file = fopen(filename, "w");

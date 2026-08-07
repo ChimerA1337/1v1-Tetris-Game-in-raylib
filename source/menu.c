@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "../include/menu.h"
 #include <stdlib.h>
+#include <time.h>
 #include <stdio.h>
 #include "../include/definitions.h"
 #include "../include/settings.h"
@@ -9,14 +10,16 @@
 #include <arpa/inet.h>
 #include "../include/network.h"
 #include "../include/gameState.h"
+#include "../include/tetrisLogic.h"
+#include "../include/preview.h"
 
 
-MenuState *createMenuState(GameState *gameState, Settings *settings) {
+MenuState *createMenuState(GameState *gameState) {
     MenuState *menuState = malloc(sizeof(MenuState));
     menuState->running = true;
     menuState->whichMenu = mainMenu;
     menuState->gameState = gameState;
-    menuState->settings = settings;
+    menuState->settings = gameState->settings;
     menuState->listeningForBind = false;
     menuState->promptHost = false;
     menuState->promptJoin = false;
@@ -179,8 +182,15 @@ void handleMenus(MenuState *menuState) {
             if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if(mMenu->exit->isMouseOnTop(mMenu->exit)) 
                     menuState->running = false;
-                if(mMenu->solo->button->isMouseOnTop(mMenu->solo->button)) 
+                if(mMenu->solo->button->isMouseOnTop(mMenu->solo->button)) {
                     menuState->whichMenu = gamingMenu;
+                    srand(time(NULL));
+                    menuState->gameState->bags = createBags();
+                    spawnMinoNoDelete(menuState->gameState);
+                    spawnGhostMinoNoDelete(menuState->gameState);
+                    updatePreviewCol(menuState->gameState->previewCol, menuState->gameState->bags);
+                }
+                    
                 if(mMenu->online->button->isMouseOnTop(mMenu->online->button)) {
                     menuState->whichMenu = onlineMenu;
                     menuState->getUser = true;
@@ -220,7 +230,6 @@ void handleMenus(MenuState *menuState) {
                 if(lMenu->start->isMouseOnTop(lMenu->start) && menuState->isHosting)
                     sendStart(menuState->gameState);
             }
-            if(!menuState->isHosting) recieveStart(menuState->gameState);
             break;
         case settingsMenu:
             handleSettingsMenu(sMenu);
@@ -303,16 +312,10 @@ void handleLobbyMenu(MenuState *menu) {
     menu->lobbyMenu->exit->draw(menu->lobbyMenu->exit);
     menu->lobbyMenu->exit->highlight(menu->lobbyMenu->exit);
 
-    int n;
     if(menu->isHosting) {
         menu->lobbyMenu->start->draw(menu->lobbyMenu->start);
         menu->lobbyMenu->start->highlight(menu->lobbyMenu->start);
-
-        if(network->clientUsername[0] == '\0') 
-            n = read(network->socket, network->clientUsername, 24);
     }
-    else if(network->hostUsername[0] == '\0')
-        n = read(network->socket, network->hostUsername, 24);
 }
 
 void handleSettingsMenu(SettingsMenu *menu) {
@@ -711,7 +714,6 @@ void promptBindingListen(MenuState *menuState) {
 
 void promptHost(MenuState *menuState) {
     if(!menuState->promptHost) return;
-    updateHosting(menuState);
     menuState->gameState->networkState->hostUsername = menuState->onlineMenu->username;
 
     Rectangle rec = {(float)1600/2 - 300, (float)900/2 - 150, 600, 200};
@@ -772,34 +774,10 @@ void promptJoin(MenuState *menuState) {
         menuState->whichMenu = lobbyMenu;
         
         network->clientUsername = menuState->onlineMenu->username;
-        send(network->socket, network->clientUsername, strlen(network->clientUsername), 0);
+        //send(network->socket, network->clientUsername, strlen(network->clientUsername), 0);
     }
 
     if(IsKeyPressed(KEY_ESCAPE)) menuState->promptJoin = false;
-}
-
-void updateHosting(MenuState *menuState) {
-    NetworkState *network = menuState->gameState->networkState;
-    if(network->socket != -1) return; // already connected, nothing to do
-
-    int clientFd = accept(network->connectSocket, NULL, NULL);
-
-    if(clientFd >= 0) {
-        network->socket = clientFd;
-        setNonBlocking(clientFd); // reads from this socket shouldn't block either
-        printf("Client connected!\n");
-        menuState->promptHost = false; // e.g. auto-close the "waiting" prompt
-
-        int n = read(clientFd, network->clientUsername, 24); // how does it know size?
-        if(n <= 0) {
-            printf("Failed to read client username from socket.\n");
-            network->clientUsername[0] = '\0'; // Clear the client username on failure
-        } else {
-            network->clientUsername[n] = '\0'; // Null-terminate the string
-        }
-        send(clientFd, network->hostUsername, strlen(network->hostUsername), 0);
-    }
-    // if clientFd < 0, no one's connected yet this frame — just continue, don't block
 }
 
 void drawLobby(MenuState *menu) {
@@ -814,8 +792,8 @@ void drawLobby(MenuState *menu) {
     DrawRectangleRec(recChat, DARKGRAY_TRANSPARENT);
     DrawRectangleLinesEx(recChat, 1.5, GRAY);
 
-    DrawText(menu->gameState->networkState->hostUsername, 100+20, 150+10, 30, SKYBLUE);
-    DrawText(menu->gameState->networkState->clientUsername, (float) 1600/2 + 100+20, 150+10, 30, YELLOW);
+    DrawText("testr", 100+20, 150+10, 30, SKYBLUE);
+    DrawText("tost", (float) 1600/2 + 100+20, 150+10, 30, YELLOW);
 }
 
 void getUsername(MenuState *menu) {

@@ -330,52 +330,54 @@ void rotateRightMinoI(Mino *mino) {
     }
 }
 
-bool isRotationLegal(GameState *gameState, Settings *settings) {
-    if(!isRightLegal(gameState, settings->GridWidth)) return false;
+bool isRotationLegal(GameState *gameState) {
+    Settings *settings = gameState->settings;
+    if(!isRightLegal(gameState)) return false;
     if(!isLeftLegal(gameState)) return false;
-    if(!isDownLegal(gameState, settings->GridHeight)) return false;
+    if(!isDownLegal(gameState)) return false;
     return true;
 }
 
-void rotateLeft(GameState *gameState, Settings *settings) {
+void rotateLeft(GameState *gameState) {
+    
     Mino *mino = gameState->mino;
     Board *board = gameState->boards->leftBoard;
 
     if(mino->minoType == MinoO) return;
     if(mino->minoType == MinoI) {
-        rotateLeftI(gameState, settings);
+        rotateLeftI(gameState);
     }
     else {
-        rotateLeftJLTSZ(gameState, settings);
+        rotateLeftJLTSZ(gameState);
     }
-    correctMinoPos(gameState, settings->BlockSize);
+    correctMinoPos(gameState);
 
     copyMinoPosition(gameState->mino, gameState->ghostMino);
-    softDropGhost(gameState, settings);
+    softDropGhost(gameState);
 }
 
-void rotateRight(GameState *gameState, Settings *settings) {
+void rotateRight(GameState *gameState) {
     Mino *mino = gameState->mino;
     Board *board = gameState->boards->leftBoard;
 
     if(mino->minoType == MinoO) return;
     if(mino->minoType == MinoI) {
-        rotateRightI(gameState, settings);
+        rotateRightI(gameState);
     }
     else {
-        rotateRightJLTSZ(gameState, settings);
+        rotateRightJLTSZ(gameState);
     }
-    correctMinoPos(gameState, settings->BlockSize);
+    correctMinoPos(gameState);
 
     copyMinoPosition(gameState->mino, gameState->ghostMino);
-    softDropGhost(gameState, settings);
+    softDropGhost(gameState);
 }
 
-void rotate180(GameState *gameState, Settings *settings) {
+void rotate180(GameState *gameState) {
 
 }
 
-void rotateLeftJLTSZ(GameState *gameState, Settings *settings) {
+void rotateLeftJLTSZ(GameState *gameState) {
     Mino *mino = gameState->mino;
     Mino *revertMino = copyMino(mino);
 
@@ -391,16 +393,16 @@ void rotateLeftJLTSZ(GameState *gameState, Settings *settings) {
     bool revertRotation = false;
     switch(mino->rotation) {
         case ROT_0:
-            revertRotation = leftTestsJLTSZRot0(gameState, settings);
+            revertRotation = leftTestsJLTSZRot0(gameState);
             break;
         case ROT_R:
-            revertRotation = leftTestsJLTSZRotR(gameState, settings);
+            revertRotation = leftTestsJLTSZRotR(gameState);
             break;
         case ROT_2:
-            revertRotation = leftTestsJLTSZRot2(gameState, settings);
+            revertRotation = leftTestsJLTSZRot2(gameState);
             break;
         case ROT_L:
-            revertRotation = leftTestsJLTSZRotL(gameState, settings);
+            revertRotation = leftTestsJLTSZRotL(gameState);
             break;
         default:
             printf("No such rotation?");
@@ -415,7 +417,7 @@ void rotateLeftJLTSZ(GameState *gameState, Settings *settings) {
     if(mino->rotation == -1) mino->rotation = ROT_L;
 }
 
-void rotateLeftI(GameState *gameState, Settings *settings) {
+void rotateLeftI(GameState *gameState) {
     Mino *mino = gameState->mino;
     Mino *revertMino = copyMino(mino);
 
@@ -423,16 +425,16 @@ void rotateLeftI(GameState *gameState, Settings *settings) {
     bool revertRotation = false;
     switch(mino->rotation) {
         case ROT_0:
-            revertRotation = leftTestsIRot0(gameState, settings);
+            revertRotation = leftTestsIRot0(gameState);
             break;
         case ROT_R:
-            revertRotation = leftTestsIRotR(gameState, settings);
+            revertRotation = leftTestsIRotR(gameState);
             break;
         case ROT_2:
-            revertRotation = leftTestsIRot2(gameState, settings);
+            revertRotation = leftTestsIRot2(gameState);
             break;
         case ROT_L:
-            revertRotation = leftTestsIRotL(gameState, settings);
+            revertRotation = leftTestsIRotL(gameState);
             break;
         default:
             printf("No such rotation?");
@@ -447,7 +449,7 @@ void rotateLeftI(GameState *gameState, Settings *settings) {
     if(mino->rotation == -1) mino->rotation = ROT_L;
 }
 
-void rotateRightJLTSZ(GameState *gameState, Settings *settings) {
+void rotateRightJLTSZ(GameState *gameState) {
     Mino *mino = gameState->mino;
     Mino *revertMino = copyMino(mino);
 
@@ -463,16 +465,16 @@ void rotateRightJLTSZ(GameState *gameState, Settings *settings) {
     bool revertRotation = false;
     switch(mino->rotation) {
         case ROT_0:
-            revertRotation = rightTestsJLTSZRot0(gameState, settings);
+            revertRotation = rightTestsJLTSZRot0(gameState);
             break;
         case ROT_R:
-            revertRotation = rightTestsJLTSZRotR(gameState, settings);
+            revertRotation = rightTestsJLTSZRotR(gameState);
             break;
         case ROT_2:
-            revertRotation = rightTestsJLTSZRot2(gameState, settings);
+            revertRotation = rightTestsJLTSZRot2(gameState);
             break;
         case ROT_L:
-            revertRotation = rightTestsJLTSZRotL(gameState, settings);
+            revertRotation = rightTestsJLTSZRotL(gameState);
             break;
         default:
             printf("No such rotation?");
@@ -486,7 +488,7 @@ void rotateRightJLTSZ(GameState *gameState, Settings *settings) {
     mino->rotation = (mino->rotation+1) % 4;
 }
 
-void rotateRightI(GameState *gameState, Settings *settings) {
+void rotateRightI(GameState *gameState) {
     Mino *mino = gameState->mino;
     Mino *revertMino = copyMino(mino);
 
@@ -494,16 +496,16 @@ void rotateRightI(GameState *gameState, Settings *settings) {
     bool revertRotation = false;
     switch(mino->rotation) {
         case ROT_0:
-            revertRotation = rightTestsIRot0(gameState, settings);
+            revertRotation = rightTestsIRot0(gameState);
             break;
         case ROT_R:
-            revertRotation = rightTestsIRotR(gameState, settings);
+            revertRotation = rightTestsIRotR(gameState);
             break;
         case ROT_2:
-            revertRotation = rightTestsIRot2(gameState, settings);
+            revertRotation = rightTestsIRot2(gameState);
             break;
         case ROT_L:
-            revertRotation = rightTestsIRotL(gameState, settings);
+            revertRotation = rightTestsIRotL(gameState);
             break;
         default:
             printf("No such rotation?");
@@ -517,242 +519,242 @@ void rotateRightI(GameState *gameState, Settings *settings) {
     mino->rotation = (mino->rotation+1) % 4;
 }
 
-bool leftTestsJLTSZRot0(GameState *gameState, Settings *settings) {
+bool leftTestsJLTSZRot0(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, -1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, -1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, -1);
         moveMinoY(mino, 3);
     }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 5
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
 
-bool leftTestsJLTSZRotR(GameState *gameState, Settings *settings) {
+bool leftTestsJLTSZRotR(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, 1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, 1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, -1);
         moveMinoY(mino, -3);
     }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 5
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
 
-bool leftTestsJLTSZRot2(GameState *gameState, Settings *settings) {
+bool leftTestsJLTSZRot2(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, -1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, -1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, 1);
         moveMinoY(mino, 3);
     }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 5
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
 
-bool leftTestsJLTSZRotL(GameState *gameState, Settings *settings) {
+bool leftTestsJLTSZRotL(GameState *gameState) {
     Mino *mino = gameState->mino;
     
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, 1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, 1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, 1);
         moveMinoY(mino, -3);
     }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 5
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
 
-bool leftTestsIRot0(GameState *gameState, Settings *settings) {
+bool leftTestsIRot0(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, -3);
         moveMinoY(mino, -2);
     }
-    if(!isRotationLegal(gameState, settings)) { // test 5
+    if(!isRotationLegal(gameState)) { // test 5
         moveMinoX(mino, 3);
         moveMinoY(mino, 3);
     }
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
-bool leftTestsIRotR(GameState *gameState, Settings *settings) {
+bool leftTestsIRotR(GameState *gameState) {
     Mino *mino = gameState->mino;
 
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 2); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 2); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, 3);
         moveMinoY(mino, -1);
     }
-    if(!isRotationLegal(gameState, settings)) { // test 5
+    if(!isRotationLegal(gameState)) { // test 5
         moveMinoX(mino, -3);
         moveMinoY(mino, 3);
     }
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
-bool leftTestsIRot2(GameState *gameState, Settings *settings) {
+bool leftTestsIRot2(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, 3);
         moveMinoY(mino, 2);
     }
-    if(!isRotationLegal(gameState, settings)) { // test 5
+    if(!isRotationLegal(gameState)) { // test 5
         moveMinoX(mino, -3);
         moveMinoY(mino, -3);
     }
-    if(!isRotationLegal(gameState, settings))return true;
+    if(!isRotationLegal(gameState))return true;
     return false;
 }
-bool leftTestsIRotL(GameState *gameState, Settings *settings) {
+bool leftTestsIRotL(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -2); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
-        moveMinoX(mino, -3);
-        moveMinoY(mino, 1);
-    }
-    if(!isRotationLegal(gameState, settings)) { // test 5
-        moveMinoX(mino, 3);
-        moveMinoY(mino, -3);
-    }
-    if(!isRotationLegal(gameState, settings)) return true;
-    return false;
-}
-
-bool rightTestsJLTSZRot0(GameState *gameState, Settings *settings) {
-    Mino *mino = gameState->mino;
-
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, -1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
-        moveMinoX(mino, 1);
-        moveMinoY(mino, 3);
-    }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
-    return false;
-}
-bool rightTestsJLTSZRotR(GameState *gameState, Settings *settings) {
-    Mino *mino = gameState->mino;
-
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, 1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
-        moveMinoX(mino, -1);
-        moveMinoY(mino, -3);
-    }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
-    return false;
-}
-bool rightTestsJLTSZRot2(GameState *gameState, Settings *settings) {
-    Mino *mino = gameState->mino;
-
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, -1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
-        moveMinoX(mino, -1);
-        moveMinoY(mino, 3);
-    }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
-    return false;
-}
-bool rightTestsJLTSZRotL(GameState *gameState, Settings *settings) {
-    Mino *mino = gameState->mino;
-
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoY(mino, 1); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
-        moveMinoX(mino, 1);
-        moveMinoY(mino, -3);
-    }
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 5
-    if(!isRotationLegal(gameState, settings)) return true;
-    return false;
-}
-
-bool rightTestsIRot0(GameState *gameState, Settings *settings) {
-    Mino *mino = gameState->mino;
-
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -2); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -2); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, -3);
         moveMinoY(mino, 1);
     }
-    if(!isRotationLegal(gameState, settings)) { // test 5
+    if(!isRotationLegal(gameState)) { // test 5
         moveMinoX(mino, 3);
         moveMinoY(mino, -3);
     }
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
-bool rightTestsIRotR(GameState *gameState, Settings *settings) {
+
+bool rightTestsJLTSZRot0(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, -1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
+        moveMinoX(mino, 1);
+        moveMinoY(mino, 3);
+    }
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 5
+    if(!isRotationLegal(gameState)) return true;
+    return false;
+}
+bool rightTestsJLTSZRotR(GameState *gameState) {
+    Mino *mino = gameState->mino;
+
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, 1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
+        moveMinoX(mino, -1);
+        moveMinoY(mino, -3);
+    }
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 5
+    if(!isRotationLegal(gameState)) return true;
+    return false;
+}
+bool rightTestsJLTSZRot2(GameState *gameState) {
+    Mino *mino = gameState->mino;
+
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, -1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
+        moveMinoX(mino, -1);
+        moveMinoY(mino, 3);
+    }
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 5
+    if(!isRotationLegal(gameState)) return true;
+    return false;
+}
+bool rightTestsJLTSZRotL(GameState *gameState) {
+    Mino *mino = gameState->mino;
+
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoY(mino, 1); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
+        moveMinoX(mino, 1);
+        moveMinoY(mino, -3);
+    }
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 5
+    if(!isRotationLegal(gameState)) return true;
+    return false;
+}
+
+bool rightTestsIRot0(GameState *gameState) {
+    Mino *mino = gameState->mino;
+
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -2); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
+        moveMinoX(mino, -3);
+        moveMinoY(mino, 1);
+    }
+    if(!isRotationLegal(gameState)) { // test 5
+        moveMinoX(mino, 3);
+        moveMinoY(mino, -3);
+    }
+    if(!isRotationLegal(gameState)) return true;
+    return false;
+}
+bool rightTestsIRotR(GameState *gameState) {
+    Mino *mino = gameState->mino;
+
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, -3);
         moveMinoY(mino, -2);
     }
-    if(!isRotationLegal(gameState, settings)) { // test 5
+    if(!isRotationLegal(gameState)) { // test 5
         moveMinoX(mino, 3);
         moveMinoY(mino, 3);
     }
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
-bool rightTestsIRot2(GameState *gameState, Settings *settings) {
+bool rightTestsIRot2(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 2); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 2); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, 3);
         moveMinoY(mino, -1);
     }
-    if(!isRotationLegal(gameState, settings)) { // test 5
+    if(!isRotationLegal(gameState)) { // test 5
         moveMinoX(mino, -3);
         moveMinoY(mino, 3);
     }
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }
-bool rightTestsIRotL(GameState *gameState, Settings *settings) {
+bool rightTestsIRotL(GameState *gameState) {
     Mino *mino = gameState->mino;
 
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, 1); // test 2
-    if(!isRotationLegal(gameState, settings)) moveMinoX(mino, -3); // test 3
-    if(!isRotationLegal(gameState, settings)) { // test 4
+    if(!isRotationLegal(gameState)) moveMinoX(mino, 1); // test 2
+    if(!isRotationLegal(gameState)) moveMinoX(mino, -3); // test 3
+    if(!isRotationLegal(gameState)) { // test 4
         moveMinoX(mino, 3);
         moveMinoY(mino, 2);
     }
-    if(!isRotationLegal(gameState, settings)) { // test 5
+    if(!isRotationLegal(gameState)) { // test 5
         moveMinoX(mino, -3);
         moveMinoY(mino, -3);
     }
-    if(!isRotationLegal(gameState, settings)) return true;
+    if(!isRotationLegal(gameState)) return true;
     return false;
 }

@@ -35,7 +35,8 @@ Hold *createHold(Settings *settings) {
     return hold;
 }
 
-void drawHold(GameState *gameState, Settings *settings) {
+void drawHold(GameState *gameState) {
+    Settings *settings = gameState->settings;
     Hold *hold = gameState->hold;
     DrawRectangleLinesEx(hold->rect, settings->OutlineThickness, settings->BoardEdgeColor);
 
@@ -62,10 +63,10 @@ void drawHold(GameState *gameState, Settings *settings) {
     }
 }
 
-void hold(GameState *gameState, Settings *settings) {
+void hold(GameState *gameState) {
     Hold *hold = gameState->hold;
     if(!hold->hasMino) {
-        holdNoMino(gameState, settings);
+        holdNoMino(gameState);
         return;
     }
 
@@ -100,10 +101,10 @@ void hold(GameState *gameState, Settings *settings) {
     
 
     updatePreviewCol(gameState->previewCol, gameState->bags);
-    spawnGhostMino(gameState, settings);
+    spawnGhostMino(gameState);
 }
 
-void holdNoMino(GameState *gameState, Settings *settings) {
+void holdNoMino(GameState *gameState) {
     gameState->hold->minoType = gameState->mino->minoType;
     gameState->hold->hasMino = true;
 
@@ -134,5 +135,5 @@ void holdNoMino(GameState *gameState, Settings *settings) {
             printf("\nbag gave a mino out of scope. ");
     }
     updatePreviewCol(gameState->previewCol, gameState->bags);
-    spawnGhostMino(gameState, settings);
+    spawnGhostMino(gameState);
 }

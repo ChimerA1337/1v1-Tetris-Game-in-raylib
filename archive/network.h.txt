@@ -1,8 +1,6 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include <enet/enet.h>
-
 typedef struct NetworkState NetworkState;
 typedef struct GameState GameState;
 
@@ -21,29 +19,28 @@ typedef struct NetMessage {
     int payload; // meaning depends on type — e.g. RNG seed for MSG_START_GAME
 } NetMessage;
 
-typedef struct NetInput {
-    
-}NetInput;
-
 struct NetworkState {
-    ENetHost *host;           // your local endpoint
-    ENetPeer *peer;           // connection to the other player (NULL if not connected yet)
+    int connectSocket;
+    int socket;
     char *hostUsername;
     char *clientUsername;
-    Player player;            // server or client
+    Player player;
 };
 
-void initializeENet();
+
+
 NetworkState *createNetworkState();
 void createHost(NetworkState *networkState);
-void createClient(NetworkState *networkState, const char *ipString);
-
-void pollNetworkEvents(GameState *gameState);
-
+void createClient(NetworkState *networkState, char *ipString);
+int setNonBlocking(int fd);
+void closeSockets(NetworkState *network);
 void freeNetworkState(NetworkState *network);
 
 void sendStart(GameState *gameState);
+void recieveStart(GameState *gameState);
+
 void sendBoardState(GameState *gameState);
+void recieveBoardState(GameState *gameState);
 
 void lobbyChat(GameState *gameState);
 
