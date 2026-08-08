@@ -10,17 +10,17 @@ list(APPEND SOURCES "main.c")
 add_executable(tetorisu ${SOURCES})
 target_include_directories(tetorisu PRIVATE include)
 
-# Homebrew paths for Apple Silicon
-if(APPLE)
-    link_directories(/opt/homebrew/lib)
-    include_directories(/opt/homebrew/include)
-endif()
-
 find_package(raylib REQUIRED)
 target_link_libraries(tetorisu raylib)
 
-# Just link enet directly
-target_link_libraries(tetorisu enet)
+# Use ENET_INCLUDE_DIR and ENET_LIBRARY from CMake cache
+if(ENET_INCLUDE_DIR AND ENET_LIBRARY)
+    target_include_directories(tetorisu PRIVATE ${ENET_INCLUDE_DIR})
+    target_link_libraries(tetorisu ${ENET_LIBRARY})
+else()
+    # Fallback
+    target_link_libraries(tetorisu enet)
+endif()
 
 if(UNIX AND NOT APPLE)
     target_link_libraries(tetorisu GL m pthread dl rt X11)

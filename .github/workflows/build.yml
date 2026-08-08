@@ -16,18 +16,18 @@ jobs:
         run: |
           git clone https://github.com/lsalzman/enet.git
           cd enet
-          ls
           autoreconf -vfi
           ./configure
           make
-          make install
           cd ..
 
       - name: Configure CMake
         run: |
           mkdir build
           cd build
-          cmake ..
+          cmake .. \
+            -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
+            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.dylib
 
       - name: Build
         run: |
