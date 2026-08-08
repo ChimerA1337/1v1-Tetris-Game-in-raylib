@@ -16,7 +16,6 @@ jobs:
         run: |
           git clone https://github.com/lsalzman/enet.git
           cd enet
-          autoreconf -vfi
           configure && make && make install
 
       - name: Configure CMake
