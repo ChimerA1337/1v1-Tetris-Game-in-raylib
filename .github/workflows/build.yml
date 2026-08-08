@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: brew install raylib cmake autoconf automake libtool gcc
+        run: brew install raylib cmake autoconf automake libtool
 
       - name: Build enet from source
         run: |
@@ -19,12 +19,15 @@ jobs:
           ls
           autoreconf -vfi
           ./configure && make && make install
+          cd ..
 
       - name: Configure CMake
         run: |
           mkdir build
           cd build
-          LDFLAGS="-L/opt/homebrew/lib" CPPFLAGS="-I/opt/homebrew/include" cmake ..
+          cmake .. \
+            -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
+            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.dylib
 
       - name: Build
         run: |
