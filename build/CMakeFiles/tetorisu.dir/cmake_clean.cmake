@@ -1,0 +1,40 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/tetorisu.dir/link.d"
+  "CMakeFiles/tetorisu.dir/main.c.o"
+  "CMakeFiles/tetorisu.dir/main.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/block.c.o"
+  "CMakeFiles/tetorisu.dir/source/block.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/board.c.o"
+  "CMakeFiles/tetorisu.dir/source/board.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/gameState.c.o"
+  "CMakeFiles/tetorisu.dir/source/gameState.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/hold.c.o"
+  "CMakeFiles/tetorisu.dir/source/hold.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/input.c.o"
+  "CMakeFiles/tetorisu.dir/source/input.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/lineSends.c.o"
+  "CMakeFiles/tetorisu.dir/source/lineSends.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/menu.c.o"
+  "CMakeFiles/tetorisu.dir/source/menu.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/minos.c.o"
+  "CMakeFiles/tetorisu.dir/source/minos.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/network.c.o"
+  "CMakeFiles/tetorisu.dir/source/network.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/preview.c.o"
+  "CMakeFiles/tetorisu.dir/source/preview.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/randomizer.c.o"
+  "CMakeFiles/tetorisu.dir/source/randomizer.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/rotation.c.o"
+  "CMakeFiles/tetorisu.dir/source/rotation.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/settings.c.o"
+  "CMakeFiles/tetorisu.dir/source/settings.c.o.d"
+  "CMakeFiles/tetorisu.dir/source/tetrisLogic.c.o"
+  "CMakeFiles/tetorisu.dir/source/tetrisLogic.c.o.d"
+  "tetorisu"
+  "tetorisu.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C)
+  include(CMakeFiles/tetorisu.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
