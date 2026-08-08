@@ -18,7 +18,7 @@ jobs:
           cd enet
           ls
           autoreconf -vfi
-          ./configure && make && make install
+          ./configure && make
           cd ..
 
       - name: Configure CMake
