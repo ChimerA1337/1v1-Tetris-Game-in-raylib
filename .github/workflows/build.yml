@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: brew install raylib cmake gcc
+        run: brew install raylib cmake autoconf automake libtool
 
       - name: Build enet from source
         run: |
