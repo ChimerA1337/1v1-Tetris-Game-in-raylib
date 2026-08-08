@@ -1,69 +1,25 @@
-name: Build Tetorisu
+name: Build-Tetorisu
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: push
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            artifact_name: tetorisu
-            asset_name: tetorisu-linux
-          - os: macos-latest
-            artifact_name: tetorisu
-            asset_name: tetorisu-macos
-          - os: windows-latest
-            artifact_name: tetorisu.exe
-            asset_name: tetorisu-windows.exe
-
+  build-mac:
+    name: Build On Mac
+    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install dependencies (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y cmake build-essential libenet-dev libx11-dev libxrandr-dev libxinerama-dev libxi-dev libxext-dev libxcursor-dev
-        
-    - name: Build raylib from source (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        git clone https://github.com/raysan5/raylib.git
-        cd raylib/src
-        make PLATFORM=PLATFORM_DESKTOP
-        sudo make install
-        sudo ldconfig
-        cd ../..
-
-    - name: Install dependencies (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        brew install raylib enet cmake
-
-    - name: Install dependencies (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        choco install raylib enet cmake -y
-
-    - name: Configure CMake
-      run: |
-        mkdir build
-        cd build
-        cmake ..
-
-    - name: Build
-      run: |
-        cd build
-        cmake --build .
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.asset_name }}
-        path: build/${{ matrix.artifact_name }}
+      - name: Install dependencies
+        run: | 
+          brew install raylib enet cmake
+      
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+      
+      - name: Build
+        run: |
+          cd build
+          cmake --build . 
