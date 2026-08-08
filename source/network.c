@@ -127,11 +127,13 @@ void pollNetworkEvents(GameState *gameState) {
                     default:
                         printf("Unknown channel: %d\n", event.channelID);
                 }
-                
+
                 // process packet->data, packet->dataLength
                 enet_packet_destroy(packet);
                 break;
             }
+            default:
+                break;
         }
     }
 }
