@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: brew install raylib cmake autoconf automake libtool
+        run: brew install raylib cmake autoconf automake libtool gcc
 
       - name: Build enet from source
         run: |
@@ -24,7 +24,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. 
+          LDFLAGS="-L/opt/homebrew/lib" CPPFLAGS="-I/opt/homebrew/include" cmake ..
 
       - name: Build
         run: |
