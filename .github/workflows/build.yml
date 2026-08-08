@@ -16,7 +16,7 @@ jobs:
         run: |
           git clone https://github.com/lsalzman/enet.git
           cd enet
-          configure && make && make install
+          ./configure && make && make install
 
       - name: Configure CMake
         run: |
