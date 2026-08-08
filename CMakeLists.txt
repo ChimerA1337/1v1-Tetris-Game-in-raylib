@@ -19,12 +19,17 @@ target_include_directories(tetorisu PRIVATE include)
 find_package(raylib REQUIRED)
 target_link_libraries(tetorisu raylib)
 
-# Find and link ENet — with fallback
-find_package(ENet QUIET)
-if(ENet_FOUND)
-    target_link_libraries(tetorisu ENet::ENet)
+# Find and link ENet using pkg-config
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+    pkg_check_modules(ENET QUIET enet)
+    if(ENET_FOUND)
+        target_include_directories(tetorisu PRIVATE ${ENET_INCLUDE_DIRS})
+        target_link_libraries(tetorisu ${ENET_LIBRARIES})
+    else()
+        target_link_libraries(tetorisu enet)
+    endif()
 else()
-    # Fallback: just link enet directly
     target_link_libraries(tetorisu enet)
 endif()
 
