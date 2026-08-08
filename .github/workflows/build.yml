@@ -10,15 +10,22 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: brew install raylib enet cmake pkg-config
+        run: brew install raylib cmake
+
+      - name: Build enet from source
+        run: |
+          git clone https://github.com/lsalzman/enet.git
+          cd enet
+          ./configure
+          make
+          sudo make install
+          cd ..
 
       - name: Configure CMake
         run: |
           mkdir build
           cd build
-          cmake .. \
-            -DCMAKE_PREFIX_PATH=/opt/homebrew \
-            -DPKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig
+          cmake .. -DCMAKE_PREFIX_PATH=/usr/local
 
       - name: Build
         run: |
