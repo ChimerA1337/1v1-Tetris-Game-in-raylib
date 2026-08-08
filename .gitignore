@@ -1,0 +1,12 @@
+
+
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+tetorisu
+tetorisu.exe
+*.o
+*.a
+.DS_Store
