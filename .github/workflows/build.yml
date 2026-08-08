@@ -18,16 +18,15 @@ jobs:
           cd enet
           ls
           autoreconf -vfi
-          ./configure && make
+          ./configure
+          make
           cd ..
 
       - name: Configure CMake
         run: |
           mkdir build
           cd build
-          cmake .. \
-            -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
-            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.dylib
+          cmake ..
 
       - name: Build
         run: |
