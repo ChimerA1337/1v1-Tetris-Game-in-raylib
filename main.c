@@ -35,16 +35,19 @@ int main(void) {
                     handleInput(gameState);
                     drawBoards(gameState->boards, settings);
                     drawPreviewCol(gameState->previewCol, settings);
+                    drawRightPreviewCol(gameState->rightPreviewCol, settings);
                     drawHold(gameState);
+                    drawRightHold(gameState);
                     drawMino(gameState->mino, settings);
                     drawMino(gameState->ghostMino, settings);
                 }
                 if(gameState->menuState->whichMenu == multiplayerMenu) {
-                    //recieveBoardState(gameState);
                     handleInput(gameState);
                     drawBoards(gameState->boards, settings);
                     drawPreviewCol(gameState->previewCol, settings);
+                    drawRightPreviewCol(gameState->rightPreviewCol, settings);
                     drawHold(gameState);
+                    drawRightHold(gameState);
                     drawMino(gameState->mino, settings);
                     drawMino(gameState->ghostMino, settings);
                 }

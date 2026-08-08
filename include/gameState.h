@@ -21,7 +21,9 @@ typedef struct GameState {
     bool paused;
     float DAStimer;
     PreviewCol *previewCol;
+    PreviewCol *rightPreviewCol;
     Hold *hold;
+    Hold *rightHold;
     MenuState *menuState;
     NetworkState *networkState;
     Settings *settings;

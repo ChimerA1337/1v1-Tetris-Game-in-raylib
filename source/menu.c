@@ -189,6 +189,7 @@ void handleMenus(MenuState *menuState) {
                     spawnMinoNoDelete(menuState->gameState);
                     spawnGhostMinoNoDelete(menuState->gameState);
                     updatePreviewCol(menuState->gameState->previewCol, menuState->gameState->bags);
+                    updatePreviewCol(menuState->gameState->rightPreviewCol, menuState->gameState->bags);
                 }
                     
                 if(mMenu->online->button->isMouseOnTop(mMenu->online->button)) {

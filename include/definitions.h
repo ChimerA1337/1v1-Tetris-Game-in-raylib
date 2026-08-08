@@ -70,7 +70,12 @@
 /***************************************************************/
 // Network data
 /***************************************************************/
+
+/*
+1. Get rid of all these channels, there should only be two, 1 for reliable connection and one for fast unreliable.
+2. Differentiate messages though NetMessage struct, tbh probably just send entire gameStates,
+    maybe make a struct with all the relevant data to send? packetState???
+*/
 #define NET_MESSAGE_CHANNEL 0
-#define NET_BOARD_CHANNEL 1
 
 #endif

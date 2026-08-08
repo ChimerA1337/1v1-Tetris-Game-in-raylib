@@ -63,6 +63,37 @@ void drawHold(GameState *gameState) {
     }
 }
 
+void drawRightHold(GameState *gameState) {
+    Settings *settings = gameState->settings;
+    Hold *hold = gameState->rightHold;
+
+    Rectangle rightHoldRect = hold->rect;
+    rightHoldRect.x += 800;
+    DrawRectangleLinesEx(rightHoldRect, settings->OutlineThickness, settings->BoardEdgeColor);
+
+    int holdBlockSize = settings->BlockSize / 2;
+    Color color = MINO_COLORS[hold->minoType];
+
+    int centerX = rightHoldRect.x + rightHoldRect.width / 2;
+    int centerY = rightHoldRect.y + rightHoldRect.height / 2;
+
+    if(hold->hasMino) {
+        for (int i = 0; i < 4; i++) {
+        int ox = MINO_SHAPES[hold->minoType][i][0];
+        int oy = MINO_SHAPES[hold->minoType][i][1];
+
+        Rectangle cell = {
+            centerX + ox * holdBlockSize - holdBlockSize / 2,
+            centerY + oy * holdBlockSize - holdBlockSize / 2,
+            holdBlockSize,
+            holdBlockSize
+        };
+        DrawRectangleRec(cell, color);
+        DrawRectangleLinesEx(cell, settings->OutlineThickness, settings->BoardEdgeColor);
+        }
+    }
+}
+
 void hold(GameState *gameState) {
     Hold *hold = gameState->hold;
     if(!hold->hasMino) {

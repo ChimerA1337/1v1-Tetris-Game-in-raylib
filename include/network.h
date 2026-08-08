@@ -8,7 +8,10 @@ typedef struct GameState GameState;
 
 typedef enum MessageType {
     MSG_HELLO,
-    MSG_START_GAME
+    MSG_START_GAME,
+    MSG_BOARD_STATE,
+    MSG_PREVIEW_COL,
+    MSG_HOLD
 } MessageType;
 
 typedef enum Player {
@@ -17,13 +20,9 @@ typedef enum Player {
 } Player;
 
 typedef struct NetMessage {
-    MessageType type;
-    int payload; // meaning depends on type — e.g. RNG seed for MSG_START_GAME
+    uint8_t type;
+    uint32_t dataSize;
 } NetMessage;
-
-typedef struct NetInput {
-    
-}NetInput;
 
 struct NetworkState {
     ENetHost *host;           // your local endpoint
@@ -44,6 +43,8 @@ void freeNetworkState(NetworkState *network);
 
 void sendStart(GameState *gameState);
 void sendBoardState(GameState *gameState);
+void sendPreviewCol(GameState *gameState);
+void sendHold(GameState *gameState);
 
 void lobbyChat(GameState *gameState);
 

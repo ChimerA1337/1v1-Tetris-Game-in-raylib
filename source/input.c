@@ -14,9 +14,13 @@ void handleInput(GameState *gameState) {
     if(IsKeyPressed(settings->HardDrop)) {
         spawnMino(gameState);
         sendBoardState(gameState);
+        sendPreviewCol(gameState);
     }
     if(IsKeyPressed(settings->SoftDrop)) softDrop(gameState);
-    if(IsKeyPressed(settings->Hold)) hold(gameState);
+    if(IsKeyPressed(settings->Hold)) {
+        hold(gameState);
+        sendHold(gameState);
+    }
 
     if(IsKeyPressed(settings->MoveLeft)) moveLeft(gameState);
     else if(IsKeyDown(settings->MoveLeft)) {

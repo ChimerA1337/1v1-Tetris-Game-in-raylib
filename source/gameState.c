@@ -2,10 +2,7 @@
 #include "../include/randomizer.h"
 #include "../include/board.h"
 #include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
 #include "../include/minos.h"
-#include "../include/tetrisLogic.h"
 #include "../include/settings.h"
 #include "../include/preview.h"
 #include "../include/hold.h"
@@ -17,15 +14,13 @@ GameState *createGameState() {
     Settings *settings = gameState->settings;
     loadSettings(settings, "data/settings.txt");
 
-    //gameState->bags = createBags();
     gameState->boards = createBoards(settings);
-    //spawnMinoNoDelete(gameState);
-    //spawnGhostMinoNoDelete(gameState);
     gameState->paused = false;
     gameState->DAStimer = 0;
     gameState->previewCol = createPreviewCol(settings);
-    //updatePreviewCol(gameState->previewCol, gameState->bags);
+    gameState->rightPreviewCol = createRightPreviewCol(settings);
     gameState->hold = createHold(settings);
+    gameState->rightHold = createHold(settings);
     gameState->menuState = createMenuState(gameState);
     gameState->networkState = createNetworkState();
     
@@ -38,7 +33,9 @@ void freeGameState(GameState *gameState) {
     freeMino(gameState->mino);
     freeMino(gameState->ghostMino);
     freePreviewCol(gameState->previewCol);
+    freePreviewCol(gameState->rightPreviewCol);
     free(gameState->hold);
+    free(gameState->rightHold);
     freeMenuState(gameState->menuState);
     freeNetworkState(gameState->networkState);
     freeSettings(gameState->settings);
