@@ -16,16 +16,14 @@ jobs:
         run: |
           git clone https://github.com/lsalzman/enet.git
           cd enet
-          ./configure
-          make
-          sudo make install
-          cd ..
+          autoreconf -vfi
+          configure && make && make install
 
       - name: Configure CMake
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH=/usr/local
+          cmake .. 
 
       - name: Build
         run: |
