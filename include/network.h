@@ -7,11 +7,10 @@ typedef struct NetworkState NetworkState;
 typedef struct GameState GameState;
 
 typedef enum MessageType {
-    MSG_HELLO,
-    MSG_START_GAME,
-    MSG_BOARD_STATE,
-    MSG_PREVIEW_COL,
-    MSG_HOLD
+    startGame,
+    sendBoard,
+    sendPreview,
+    sendHoldMino
 } MessageType;
 
 typedef enum Player {

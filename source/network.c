@@ -100,7 +100,7 @@ void pollNetworkEvents(GameState *gameState) {
                 size_t payloadSize = packet->dataLength - sizeof(NetMessage);
                 
                 switch(message->type) {
-                    case MSG_START_GAME:
+                    case startGame:
                         printf("Received NetMessage\n");
                         srand(*(int *)payload);
                         gameState->menuState->whichMenu = multiplayerMenu;
@@ -112,15 +112,15 @@ void pollNetworkEvents(GameState *gameState) {
                         sendPreviewCol(gameState);
                         sendHold(gameState);
                         break;
-                    case MSG_BOARD_STATE:
+                    case sendBoard:
                         printf("Received board state update\n");
                         memcpy(gameState->boards->rightBoard->blocks, payload, payloadSize);
                         break;
-                    case MSG_PREVIEW_COL:
+                    case sendPreview:
                         printf("Received preview column update\n");
                         memcpy(gameState->rightPreviewCol->previews, payload, payloadSize);
                         break;
-                    case MSG_HOLD:
+                    case sendHoldMino:
                         printf("Recieved hold update\n");
                         memcpy(gameState->rightHold, payload, payloadSize);
                         break;
@@ -154,7 +154,7 @@ void sendStart(GameState *gameState) {
     memcpy(packet + sizeof(NetMessage), &rngSeed, sizeof(uint32_t));
     
     NetMessage *header = (NetMessage *)packet;
-    header->type = MSG_START_GAME;
+    header->type = startGame;
     header->dataSize = sizeof(uint32_t);
 
     ENetPacket *enetPacket = enet_packet_create(
@@ -196,7 +196,7 @@ void sendBoardState(GameState *gameState) {
     memcpy(packet + sizeof(NetMessage), blocks, boardDataSize);
 
     NetMessage *header = (NetMessage *)packet;
-    header->type = MSG_BOARD_STATE;
+    header->type = sendBoard;
     header->dataSize = boardDataSize;
 
     ENetPacket *enetPacket = enet_packet_create(
@@ -225,7 +225,7 @@ void sendPreviewCol(GameState *gameState) {
     memcpy(packet + sizeof(NetMessage), gameState->previewCol->previews, previewSize);
 
     NetMessage *header = (NetMessage *)packet;
-    header->type = MSG_PREVIEW_COL;
+    header->type = sendPreview;
     header->dataSize = previewSize;
 
     ENetPacket *enetPacket = enet_packet_create(
@@ -249,7 +249,7 @@ void sendHold(GameState *gameState) {
     char *packet = malloc(totalSize);
 
     NetMessage *header = (NetMessage *)packet;
-    header->type = MSG_HOLD;
+    header->type = sendHoldMino;
     header->dataSize = holdSize;
     memcpy(packet + sizeof(NetMessage), gameState->hold, holdSize);
 
