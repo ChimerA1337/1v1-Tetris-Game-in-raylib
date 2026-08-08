@@ -1,3 +1,0 @@
-/home/chimera/Desktop/tetorisu/build/CMakeFiles/tetorisu.dir
-/home/chimera/Desktop/tetorisu/build/CMakeFiles/edit_cache.dir
-/home/chimera/Desktop/tetorisu/build/CMakeFiles/rebuild_cache.dir
