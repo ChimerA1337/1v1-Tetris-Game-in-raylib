@@ -9,9 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install cmake
-        run: choco install cmake git -y
-
       - name: Install MSYS2
         uses: msys2/setup-msys2@v2
         with:
@@ -23,6 +20,8 @@ jobs:
             autoconf
             automake
             libtool
+            git
+            make
 
       - name: Build raylib and enet
         shell: msys2 {0}
@@ -31,7 +30,6 @@ jobs:
           cd raylib/src
           make PLATFORM=PLATFORM_DESKTOP
           cd ../..
-          
           git clone https://github.com/lsalzman/enet.git
           cd enet
           autoreconf -vfi
