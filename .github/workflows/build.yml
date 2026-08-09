@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tetorisu-windows
-          path: build/tetorisu/vcxproj
+          path: build/tetorisu.vcxproj # This gives no fucking file for some reason aaaa
 
   build-mac:
     name: Build on Mac
