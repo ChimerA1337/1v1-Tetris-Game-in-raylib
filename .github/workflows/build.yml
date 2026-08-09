@@ -9,50 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install MSYS2
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: MINGW64
-          update: true
-          install: >-
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-cmake
-            autoconf
-            automake
-            libtool
-            git
-            make
-
-      - name: Build raylib and enet
-        shell: msys2 {0}
-        run: |
-          git clone https://github.com/raysan5/raylib.git
-          cd raylib/src
-          make PLATFORM=PLATFORM_DESKTOP
-          cd ../..
-          git clone https://github.com/lsalzman/enet.git
-          cd enet
-          autoreconf -vfi
-          ./configure
-          make
-          cd ..
-
-      - name: Configure CMake
-        shell: msys2 {0}
-        run: |
-          mkdir build
-          cd build
-          cmake .. \
-            -DRAYLIB_INCLUDE_DIR=$(pwd)/../raylib/src \
-            -DRAYLIB_LIBRARY=$(pwd)/../raylib/src/libraylib.a \
-            -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
-            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.a
-
-      - name: Build
-        shell: msys2 {0}
-        run: |
-          cd build
-          cmake --build .
+      - name: Install Dependencies
+        run: choco install cmake raylib
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
