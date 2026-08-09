@@ -4,40 +4,33 @@ on: push
 
 jobs:
   build-windows:
+    build-windows:
     name: Build on Windows
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install CMake and git
-        run: |
-          choco install cmake git -y
-          
-      - name: Install raylib and enet via vcpkg
+      - name: Install dependencies via vcpkg
         run: |
           git clone https://github.com/Microsoft/vcpkg.git
           cd vcpkg
-          bootstrap-vcpkg.bat
-          vcpkg integrate install
-          vcpkg install raylib
-          vcpkg install enet
+          .\bootstrap-vcpkg.bat
+          .\vcpkg install raylib:x64-windows enet:x64-windows
 
       - name: Configure CMake
         run: |
-          mkdir build
-          cd build
-          cmake ..
+          cmake -B build -S . `
+            -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake" `
+            -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: |
-          cd build
-          cmake --build .
+        run: cmake --build build --config Release
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tetorisu-windows
-          path: build/tetorisu.vcxproj # This gives no fucking file for some reason aaaa
+          path: build/Release/tetorisu.exe
 
   build-mac:
     name: Build on Mac
