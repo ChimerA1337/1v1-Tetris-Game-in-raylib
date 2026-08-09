@@ -21,6 +21,12 @@ jobs:
           vcpkg integrate install
           vcpkg install raylib
 
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+
       - name: Build
         run: |
           cd build
