@@ -2,11 +2,9 @@
 #include "../include/menu.h"
 #include <stdlib.h>
 #include <time.h>
-#include <stdio.h>
 #include "../include/definitions.h"
 #include "../include/settings.h"
-#include <netdb.h>
-#include <arpa/inet.h>
+//#include <netdb.h>
 #include "../include/network.h"
 #include "../include/gameState.h"
 #include "../include/tetrisLogic.h"
@@ -721,16 +719,19 @@ void promptHost(MenuState *menuState) {
     DrawRectangleLinesEx(rec, 1.5, PURPLE);
 
     char hostname[128];
-    char hostnameString[256] = "Hosting at: ";
+    char hostnameString[128] = "Hosting at: ";
+    char hostIp[20];
     
     gethostname(hostname, sizeof(hostname));
     strcat(hostnameString, hostname);
 
-    struct hostent *hostEntry = gethostbyname(hostname);
-    char *IpBuffer = inet_ntoa(*((struct in_addr*) hostEntry->h_addr_list[0]));
+    ENetAddress addr;
+    
+    enet_address_set_host(&addr, hostname);
+    enet_address_get_host_ip(&addr, hostIp, 20);
 
     DrawText(hostnameString, 1600/2 - 300 + 20, 900/2 - 150 + 10, 40, PURPLE);
-    DrawText(IpBuffer, 1600/2 - 300 + 20, 900/2 - 100 + 10, 40, PURPLE);
+    DrawText(hostIp, 1600/2 - 300 + 20, 900/2 - 100 + 10, 40, PURPLE);
 
     int key = GetKeyPressed();
     if(key == KEY_ESCAPE) menuState->promptHost = false;

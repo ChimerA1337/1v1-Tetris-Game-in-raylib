@@ -16,7 +16,7 @@ static const int MINO_SHAPES[7][4][2] = {
     [MinoZ] = {{-1,-1},{0,-1},{0,0},{1,0}}
 };
 
-static const Color MINO_COLORS[7] = {
+static Color MINO_COLORS[7] = {
     [MinoI] = SKYBLUE, [MinoO] = YELLOW, [MinoT] = PURPLE,
     [MinoL] = ORANGE, [MinoJ] = DARKBLUE, [MinoS] = GREEN, [MinoZ] = RED
 };

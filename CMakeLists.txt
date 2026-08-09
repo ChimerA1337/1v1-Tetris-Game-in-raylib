@@ -1,3 +1,5 @@
+# Rewrite this piece of shit when you learn how CMakeLists works
+
 cmake_minimum_required(VERSION 3.10)
 project(tetorisu C)
 

@@ -4,7 +4,7 @@
 #include "../include/settings.h"
 #include "../include/randomizer.h"
 
-static const int MINO_SHAPES[7][4][2] = {
+static int MINO_SHAPES[7][4][2] = {
     [MinoI] = {{-1,0},{0,0},{1,0},{2,0}},
     [MinoO] = {{0,0},{1,0},{0,1},{1,1}},
     [MinoT] = {{-1,0},{0,0},{1,0},{0,-1}},
