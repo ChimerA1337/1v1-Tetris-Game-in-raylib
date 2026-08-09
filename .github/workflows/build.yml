@@ -20,15 +20,7 @@ jobs:
           bootstrap-vcpkg.bat
           vcpkg integrate install
           vcpkg install raylib
-
-      - name: Build enet from source
-        run: |
-          git clone https://github.com/lsalzman/enet.git
-          cd enet
-          autoreconf -vfi
-          ./configure
-          make
-          cd ..
+          vcpkg install enet
 
       - name: Configure CMake
         run: |
