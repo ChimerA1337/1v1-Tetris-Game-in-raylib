@@ -29,14 +29,12 @@ jobs:
           git clone https://github.com/raysan5/raylib.git
           cd raylib/src
           make PLATFORM=PLATFORM_DESKTOP
-          make install
           cd ../..
           git clone https://github.com/lsalzman/enet.git
           cd enet
           autoreconf -vfi
           ./configure
           make
-          make install
           cd ..
 
       - name: Configure CMake
@@ -45,7 +43,8 @@ jobs:
           mkdir build
           cd build
           cmake .. \
-            -DCMAKE_PREFIX_PATH=/usr/local \
+            -DRAYLIB_INCLUDE_DIR=$(pwd)/../raylib/src \
+            -DRAYLIB_LIBRARY=$(pwd)/../raylib/src/libraylib.a \
             -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
             -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.a
 
