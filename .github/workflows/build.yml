@@ -11,7 +11,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install cmake git -y
+          choco install cmake git autoconf automake libtool -y
           
       - name: Install raylib via vcpkg
         run: |
