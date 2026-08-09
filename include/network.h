@@ -2,6 +2,7 @@
 #define NETWORK_H
 
 #include <enet/enet.h>
+#include <stdint.h>
 
 typedef struct NetworkState NetworkState;
 typedef struct GameState GameState;

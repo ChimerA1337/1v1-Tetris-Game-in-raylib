@@ -37,5 +37,12 @@ elseif(APPLE)
     target_link_libraries(tetorisu m pthread)
     target_link_libraries(tetorisu "-framework Cocoa" "-framework OpenGL")
 elseif(WIN32)
+    target_compile_definitions(tetorisu PRIVATE
+        WIN32_LEAN_AND_MEAN
+        NOGDI
+    )
+
+    target_compile_options(tetorisu PRIVATE /showIncludes)
+
     target_link_libraries(tetorisu m pthread)
 endif()

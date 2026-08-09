@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include "../include/definitions.h"
 #include "../include/settings.h"
-#include <unistd.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include "../include/network.h"
