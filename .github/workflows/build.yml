@@ -11,9 +11,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          choco install cmake git autoconf automake libtool -y
+          choco install cmake git -y
           
-      - name: Install raylib via vcpkg
+      - name: Install raylib and enet via vcpkg
         run: |
           git clone https://github.com/Microsoft/vcpkg.git
           cd vcpkg
