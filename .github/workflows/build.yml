@@ -9,58 +9,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install cmake
-        run: choco install cmake git -y
-
-      - name: Install MSYS2
-        uses: msys2/setup-msys2@v2
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
         with:
-          msystem: MINGW64
-          update: true
-          install: >-
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-cmake
-            autoconf
-            automake
-            libtool
+          vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
+          vcpkgGitCommitId: '6185aa76d7ac145b8156269002de4d4d880faf4b'
 
-      - name: Build raylib and enet
-        shell: msys2 {0}
+      - name: Install dependencies with vcpkg
         run: |
-          # Build raylib
-          git clone https://github.com/raysan5/raylib.git
-          cd raylib/src
-          make PLATFORM=PLATFORM_DESKTOP
-          cd ../..
-          
-          # Build enet
-          git clone https://github.com/lsalzman/enet.git
-          cd enet
-          autoreconf -vfi
-          ./configure
-          make
-          cd ..
+          vcpkg install raylib:x64-windows enet:x64-windows --triplet x64-windows
 
       - name: Configure CMake
-        shell: msys2 {0}
         run: |
           mkdir build
           cd build
-          cmake .. \
-            -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
-            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.a
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="${{ runner.workspace }}/b/vcpkg/scripts/buildsystems/vcpkg.cmake"
 
       - name: Build
-        shell: msys2 {0}
         run: |
           cd build
-          cmake --build .
+          cmake --build . --config Release
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tetorisu-windows
-          path: build/tetorisu.exe
+          path: build/Release/tetorisu.exe
 
   build-mac:
     name: Build on Mac
