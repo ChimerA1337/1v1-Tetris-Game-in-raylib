@@ -21,11 +21,22 @@ jobs:
           vcpkg integrate install
           vcpkg install raylib
 
+      - name: Build enet from source
+        run: |
+          git clone https://github.com/lsalzman/enet.git
+          cd enet
+          autoreconf -vfi
+          ./configure
+          make
+          cd ..
+
       - name: Configure CMake
         run: |
           mkdir build
           cd build
-          cmake ..
+          cmake .. \
+            -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
+            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.dylib
 
       - name: Build
         run: |
