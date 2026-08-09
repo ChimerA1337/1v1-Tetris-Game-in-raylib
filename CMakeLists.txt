@@ -10,15 +10,20 @@ list(APPEND SOURCES "main.c")
 add_executable(tetorisu ${SOURCES})
 target_include_directories(tetorisu PRIVATE include)
 
-find_package(raylib REQUIRED)
-target_link_libraries(tetorisu raylib)
+# Find raylib
+find_package(raylib QUIET)
+if(NOT raylib_FOUND)
+    # Fallback: just link it
+    target_link_libraries(tetorisu raylib)
+else()
+    target_link_libraries(tetorisu raylib)
+endif()
 
-# Use ENET_INCLUDE_DIR and ENET_LIBRARY from CMake cache
+# Find enet
 if(ENET_INCLUDE_DIR AND ENET_LIBRARY)
     target_include_directories(tetorisu PRIVATE ${ENET_INCLUDE_DIR})
     target_link_libraries(tetorisu ${ENET_LIBRARY})
 else()
-    # Fallback
     target_link_libraries(tetorisu enet)
 endif()
 
