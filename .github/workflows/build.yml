@@ -9,18 +9,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: choco install raylib enet cmake -y
+      - name: Install cmake
+        run: choco install cmake -y
+
+      - name: Install MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            autoconf
+            automake
+            libtool
+
+      - name: Build raylib and enet
+        shell: msys2 {0}
+        run: |
+          # Build raylib
+          git clone https://github.com/raysan5/raylib.git
+          cd raylib/src
+          make PLATFORM=PLATFORM_DESKTOP
+          cd ../..
+          
+          # Build enet
+          git clone https://github.com/lsalzman/enet.git
+          cd enet
+          autoreconf -vfi
+          ./configure
+          make
+          cd ..
 
       - name: Configure CMake
+        shell: msys2 {0}
         run: |
           mkdir build
           cd build
           cmake .. \
             -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
-            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.dylib
-            
+            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.a
+
       - name: Build
+        shell: msys2 {0}
         run: |
           cd build
           cmake --build .
@@ -29,8 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tetorisu-windows
-          path: build/tetorisu
-      
+          path: build/tetorisu.exe
 
   build-mac:
     name: Build on Mac
