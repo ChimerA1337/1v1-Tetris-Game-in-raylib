@@ -10,7 +10,21 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Dependencies
-        run: choco search pkgname raylib
+        run: |
+          choco install cmake git -y
+          
+      - name: Install raylib via vcpkg
+        run: |
+          git clone https://github.com/Microsoft/vcpkg.git
+          cd vcpkg
+          bootstrap-vcpkg.bat
+          vcpkg integrate install
+          vcpkg install raylib
+
+      - name: Build
+        run: |
+          cd build
+          cmake --build .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
