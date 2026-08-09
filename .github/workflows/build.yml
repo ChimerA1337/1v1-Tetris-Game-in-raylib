@@ -10,47 +10,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Dependencies
-        run: choco install cmake raylib
+        run: choco search pkgname raylib
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tetorisu-windows
           path: build/tetorisu.exe
-
-  build-mac:
-    name: Build on Mac
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: brew install raylib cmake autoconf automake libtool
-
-      - name: Build enet from source
-        run: |
-          git clone https://github.com/lsalzman/enet.git
-          cd enet
-          autoreconf -vfi
-          ./configure
-          make
-          cd ..
-
-      - name: Configure CMake
-        run: |
-          mkdir build
-          cd build
-          cmake .. \
-            -DENET_INCLUDE_DIR=$(pwd)/../enet/include \
-            -DENET_LIBRARY=$(pwd)/../enet/.libs/libenet.dylib
-
-      - name: Build
-        run: |
-          cd build
-          cmake --build .
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tetorisu-macos
-          path: build/tetorisu
