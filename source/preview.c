@@ -14,12 +14,6 @@ static int MINO_SHAPES[7][4][2] = {
     [MinoZ] = {{-1,-1},{0,-1},{0,0},{1,0}}
 };
 
-static Color MINO_COLORS[7] = {
-    [MinoI] = SKYBLUE, [MinoO] = YELLOW, [MinoT] = PURPLE,
-    [MinoL] = ORANGE, [MinoJ] = DARKBLUE, [MinoS] = GREEN, [MinoZ] = RED
-};
-
-
 PreviewCol *createPreviewCol(Settings *settings) {
     Preview *previews = malloc(sizeof(Preview) * settings->PreviewMinoCount);
 
@@ -100,7 +94,7 @@ void drawPreview(Settings *settings, Preview *preview) {
     DrawRectangleLinesEx(preview->rect, settings->OutlineThickness, settings->BoardEdgeColor);
 
     int previewBlockSize = settings->BlockSize / 2;
-    Color color = MINO_COLORS[preview->minoType];
+    Color color = getMinoColor(preview->minoType);
 
     int centerX = preview->rect.x + preview->rect.width / 2;
     int centerY = preview->rect.y + preview->rect.height / 2;
@@ -133,7 +127,7 @@ void drawRightPreview(Settings *settings, Preview *preview) {
     DrawRectangleLinesEx(rect, settings->OutlineThickness, settings->BoardEdgeColor);
 
     int previewBlockSize = settings->BlockSize / 2;
-    Color color = MINO_COLORS[preview->minoType];
+    Color color = getMinoColor(preview->minoType);
 
     int centerX = preview->rect.x+800 + preview->rect.width / 2;
     int centerY = preview->rect.y + preview->rect.height / 2;

@@ -1,5 +1,6 @@
 #include "../include/gameState.h"
 #include "../include/hold.h"
+#include "../include/minos.h"
 #include <stdlib.h>
 #include "../include/settings.h"
 #include "../include/tetrisLogic.h"
@@ -14,11 +15,6 @@ static int MINO_SHAPES[7][4][2] = {
     [MinoJ] = {{-1,-1},{-1,0},{0,0},{1,0}},
     [MinoS] = {{-1,0},{0,0},{0,-1},{1,-1}},
     [MinoZ] = {{-1,-1},{0,-1},{0,0},{1,0}}
-};
-
-static Color MINO_COLORS[7] = {
-    [MinoI] = SKYBLUE, [MinoO] = YELLOW, [MinoT] = PURPLE,
-    [MinoL] = ORANGE, [MinoJ] = DARKBLUE, [MinoS] = GREEN, [MinoZ] = RED
 };
 
 Hold *createHold(Settings *settings) {
@@ -41,7 +37,7 @@ void drawHold(GameState *gameState) {
     DrawRectangleLinesEx(hold->rect, settings->OutlineThickness, settings->BoardEdgeColor);
 
     int holdBlockSize = settings->BlockSize / 2;
-    Color color = MINO_COLORS[hold->minoType];
+    Color color = getMinoColor(hold->minoType);
 
     int centerX = hold->rect.x + hold->rect.width / 2;
     int centerY = hold->rect.y + hold->rect.height / 2;
@@ -72,7 +68,7 @@ void drawRightHold(GameState *gameState) {
     DrawRectangleLinesEx(rightHoldRect, settings->OutlineThickness, settings->BoardEdgeColor);
 
     int holdBlockSize = settings->BlockSize / 2;
-    Color color = MINO_COLORS[hold->minoType];
+    Color color = getMinoColor(hold->minoType);
 
     int centerX = rightHoldRect.x + rightHoldRect.width / 2;
     int centerY = rightHoldRect.y + rightHoldRect.height / 2;

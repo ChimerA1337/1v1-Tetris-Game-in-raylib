@@ -144,3 +144,15 @@ void correctMinoPosGhost(GameState *gameState) {
     correctBlockPos(gameState->boards->leftBoard, gameState->ghostMino->block3, blockSize);
 }
 
+Color getMinoColor(MinoType type) {
+    switch (type) {
+        case MinoI: return SKYBLUE;
+        case MinoO: return YELLOW;
+        case MinoT: return PURPLE;
+        case MinoL: return ORANGE;
+        case MinoJ: return DARKBLUE;
+        case MinoS: return GREEN;
+        case MinoZ: return RED;
+        default:    return BLACK;
+    }
+}

@@ -52,4 +52,6 @@ void clearMino(Mino *mino, Color boardColor);
 void correctMinoPos(GameState *gameState);
 void correctMinoPosGhost(GameState *gameState);
 
+Color getMinoColor(MinoType type);
+
 #endif
