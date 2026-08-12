@@ -6,6 +6,7 @@
 #include "../include/settings.h"
 #include "../include/preview.h"
 #include "../include/definitions.h"
+#include "../include/lineSends.h"
 
 void spawnMinoNoDelete(GameState *gameState) {
     switch(getNextMino(gameState->bags->bag1)) {
@@ -279,14 +280,20 @@ bool isRightLegal(GameState *gameState) {
     return true;
 }
 
-void clearLines(GameState *gameState) {
+int clearLines(GameState *gameState) {
+    int lineCount = 0;
     Board *board = gameState->boards->leftBoard;
     int width = gameState->settings->GridWidth;
     Color boardColor = gameState->settings->BoardColor;
     for(int i = 0; i < gameState->settings->GridHeight; i++) {
-        if(isLineFull(board, width, i)) 
+        if(isLineFull(board, width, i)) {
             clearLine(board, width, i, boardColor);
+            lineCount++;
+        }
     }
+    if(lineCount > 0) printf("\ncleared %d lines.", lineCount);
+    sendLinesNet(gameState, lineCount);
+    return lineCount;
 }
 
 void clearLine(Board *board, int width, int row, Color boardColor) {
@@ -296,7 +303,7 @@ void clearLine(Board *board, int width, int row, Color boardColor) {
     }
     for(int i = row; i > 0; i--) {
         for(int j = 0; j < width; j++) {
-            replaceBlock(board, j, i);
+            replaceBlockDown(board, j, i);
         }
     }
     for(int i = 0; i < width; i++) {

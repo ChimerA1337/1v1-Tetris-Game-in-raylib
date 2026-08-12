@@ -20,6 +20,7 @@ typedef struct Settings {
     Color BoardColor;
     Color OutlineColor;
     Color BoardEdgeColor;
+    Color GarbageColor;
     float GhostMinoAlpha;
     float Das;
     int HardDrop;

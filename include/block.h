@@ -19,7 +19,10 @@ typedef struct GameState GameState;
 
 Block *getBlock(Board *board, int x, int y);
 Block *copyBlock(Board *board, int x, int y);
-void replaceBlock(Board *board, int x, int y);
+
+void replaceBlockDown(Board *board, int x, int y);
+void replaceBlockUp(Board *board, int x, int y);
+
 Block *copyBlockFromBlock(Block *block);
 void freeBlock(Block *block);
 Block createBlock(Settings *settings, int i, int j);

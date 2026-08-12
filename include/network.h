@@ -11,7 +11,8 @@ typedef enum MessageType {
     startGame,
     sendBoard,
     sendPreview,
-    sendHoldMino
+    sendHoldMino,
+    sendLines
 } MessageType;
 
 typedef enum Player {
@@ -45,6 +46,7 @@ void sendStart(GameState *gameState);
 void sendBoardState(GameState *gameState);
 void sendPreviewCol(GameState *gameState);
 void sendHold(GameState *gameState);
+void sendLinesNet(GameState *gameState, int lineCount);
 
 void lobbyChat(GameState *gameState);
 

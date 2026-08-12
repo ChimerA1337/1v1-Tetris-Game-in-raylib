@@ -43,11 +43,18 @@ Block *copyBlock(Board *board, int x, int y) {
     return returnBlock;
 }
 
-void replaceBlock(Board *board, int x, int y) {
+void replaceBlockDown(Board *board, int x, int y) {
     Block *block = &board->blocks[x + y * board->xBlocks];
 
     block->color = board->blocks[x + (y-1) * board->xBlocks].color;
     block->occupied = board->blocks[x + (y-1) * board->xBlocks].occupied;
+}
+
+void replaceBlockUp(Board *board, int x, int y) {
+    Block *block = &board->blocks[x + y * board->xBlocks];
+
+    block->color = board->blocks[x + (y+1) * board->xBlocks].color;
+    block->occupied = board->blocks[x + (y+1) * board->xBlocks].occupied;
 }
 
 Block *copyBlockFromBlock(Block *block) {

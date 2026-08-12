@@ -31,7 +31,7 @@ void softDropGhost(GameState *gameState);
 void dropMinoGhost(GameState *gameState);
 void commitMinoToBoard(GameState *gameState);
 
-void clearLines(GameState *gameState);
+int clearLines(GameState *gameState);
 void clearLine(Board *board, int width, int row, Color boardColor);
 bool isLineFull(Board *board, int width, int row);
 

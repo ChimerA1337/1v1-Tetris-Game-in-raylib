@@ -23,6 +23,8 @@ GameState *createGameState() {
     gameState->rightHold = createHold(settings);
     gameState->menuState = createMenuState(gameState);
     gameState->networkState = createNetworkState();
+
+    gameState->linesToRecieve = 0;
     
     return gameState;
 }

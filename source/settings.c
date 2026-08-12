@@ -50,6 +50,10 @@ void loadSettings(Settings *settings, const char *filename) {
         else if(strcmp(key, "BoardEdgeColorG") == 0) settings->BoardEdgeColor.g = (int)value;
         else if(strcmp(key, "BoardEdgeColorB") == 0) settings->BoardEdgeColor.b = (int)value;
         else if(strcmp(key, "BoardEdgeColorA") == 0) settings->BoardEdgeColor.a = (int)value;
+        else if(strcmp(key, "GarbageColorR") == 0) settings->GarbageColor.r = (int)value;
+        else if(strcmp(key, "GarbageColorG") == 0) settings->GarbageColor.g = (int)value;
+        else if(strcmp(key, "GarbageColorB") == 0) settings->GarbageColor.b = (int)value;
+        else if(strcmp(key, "GarbageColorA") == 0) settings->GarbageColor.a = (int)value;
         else if(strcmp(key, "GhostMinoAlpha") == 0) settings->GhostMinoAlpha = value;
         else if(strcmp(key, "Das") == 0) settings->Das = value;
         else if(strcmp(key, "HardDrop") == 0) settings->HardDrop = (int)value;
@@ -97,6 +101,10 @@ void saveSettings(Settings *settings, const char *filename) {
     fprintf(file, "BoardEdgeColorG=%d\n", settings->BoardEdgeColor.g);
     fprintf(file, "BoardEdgeColorB=%d\n", settings->BoardEdgeColor.b);
     fprintf(file, "BoardEdgeColorA=%d\n", settings->BoardEdgeColor.a);
+    fprintf(file, "GarbageColorR=%d\n", settings->BoardEdgeColor.r);
+    fprintf(file, "GarbageColorG=%d\n", settings->BoardEdgeColor.g);
+    fprintf(file, "GarbageColorB=%d\n", settings->BoardEdgeColor.b);
+    fprintf(file, "GarbageColorA=%d\n", settings->BoardEdgeColor.a);
     fprintf(file, "GhostMinoAlpha=%.2f\n", settings->GhostMinoAlpha);
     fprintf(file, "Das=%.4f\n", settings->Das);
     fprintf(file, "HardDrop=%d\n", settings->HardDrop);
@@ -127,6 +135,7 @@ void setDefaultSettings(Settings *settings) {
     settings->BoardColor = DARKGRAY;
     settings->OutlineColor = GRAY;
     settings->BoardEdgeColor = WHITE;
+    settings->GarbageColor = (Color) {220, 220, 220, 255};
     settings->GhostMinoAlpha = 0.5;
     settings->Das = 0.16;
     settings->HardDrop = KEY_SPACE;
@@ -154,7 +163,8 @@ void printSettings(Settings *settings) {
     printf("BlockSize: %d\n", settings->BlockSize);
     printf("BoardColor100: (%d, %d, %d, %d)\n", settings->BoardColor.r, settings->BoardColor.g, settings->BoardColor.b, settings->BoardColor.a);
     printf("OutlineColor: (%d, %d, %d, %d)\n", settings->OutlineColor.r, settings->OutlineColor.g, settings->OutlineColor.b, settings->OutlineColor.a);
-    printf("BoardEdgeColor: (%d, %d, %d, %d)\n", settings->BoardEdgeColor.r, settings->OutlineColor.g, settings->OutlineColor.b, settings->OutlineColor.a);
+    printf("BoardEdgeColor: (%d, %d, %d, %d)\n", settings->BoardEdgeColor.r, settings->BoardEdgeColor.g, settings->BoardEdgeColor.b, settings->BoardEdgeColor.a);
+    printf("GarbageColor: (%d, %d, %d, %d)\n", settings->GarbageColor.r, settings->GarbageColor.g, settings->GarbageColor.b, settings->GarbageColor.a);
     printf("GhostMinoAlpha: %.2f\n", settings->GhostMinoAlpha);
     printf("Das: %.2f\n", settings->Das);
     printf("HardDrop: %d\n", settings->HardDrop);

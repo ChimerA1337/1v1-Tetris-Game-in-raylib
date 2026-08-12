@@ -10,7 +10,7 @@
 #include "../include/definitions.h"
 #include "../include/block.h"
 #include "../include/hold.h"
-
+#include "../include/lineSends.h"
 
 void initializeENet() {
     if (enet_initialize() != 0) {
@@ -124,6 +124,11 @@ void pollNetworkEvents(GameState *gameState) {
                         printf("Recieved hold update\n");
                         memcpy(gameState->rightHold, payload, payloadSize);
                         break;
+                    case sendLines:
+                        printf("Recieved line sends\n");
+                        int linesSent;
+                        memcpy(&linesSent, payload, payloadSize);
+                        recieveLines(gameState, linesSent);
                     default:
                         printf("Unknown channel: %d\n", event.channelID);
                 }
@@ -254,6 +259,33 @@ void sendHold(GameState *gameState) {
     header->type = sendHoldMino;
     header->dataSize = holdSize;
     memcpy(packet + sizeof(NetMessage), gameState->hold, holdSize);
+
+    ENetPacket *enetPacket = enet_packet_create(
+        packet,
+        totalSize,
+        ENET_PACKET_FLAG_RELIABLE
+    );
+
+    enet_peer_send(network->peer, NET_MESSAGE_CHANNEL, enetPacket);
+    enet_host_flush(network->host);
+
+    free(packet);
+}
+
+void sendLinesNet(GameState *gameState, int lineCount) {
+    NetworkState *network = gameState->networkState;
+    if (network->peer == NULL) return;
+
+    int lineCountSend = lineCount;
+
+    size_t lineSendSize = sizeof(int);
+    size_t totalSize = lineSendSize + sizeof(NetMessage);
+    char *packet = malloc(totalSize);
+
+    NetMessage *header = (NetMessage *)packet;
+    header->type = sendLines;
+    header->dataSize = lineSendSize;
+    memcpy(packet + sizeof(NetMessage), &lineCountSend, lineSendSize);
 
     ENetPacket *enetPacket = enet_packet_create(
         packet,

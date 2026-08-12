@@ -27,6 +27,7 @@ typedef struct GameState {
     MenuState *menuState;
     NetworkState *networkState;
     Settings *settings;
+    int linesToRecieve;
 } GameState;
 
 GameState *createGameState();
