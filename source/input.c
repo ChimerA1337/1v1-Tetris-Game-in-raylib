@@ -7,6 +7,7 @@
 #include "../include/settings.h"
 #include "../include/hold.h"
 #include "../include/network.h"
+#include "../include/lineSends.h"
 //#include <stdio.h>
 
 void handleInput(GameState *gameState) {
@@ -15,6 +16,7 @@ void handleInput(GameState *gameState) {
         spawnMino(gameState);
         sendBoardState(gameState);
         sendPreviewCol(gameState);
+        recieveLines(gameState);
     }
     if(IsKeyPressed(settings->SoftDrop)) softDrop(gameState);
     if(IsKeyPressed(settings->Hold)) {

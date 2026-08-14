@@ -28,6 +28,7 @@ typedef struct GameState {
     NetworkState *networkState;
     Settings *settings;
     int linesToRecieve;
+    int combo;
 } GameState;
 
 GameState *createGameState();

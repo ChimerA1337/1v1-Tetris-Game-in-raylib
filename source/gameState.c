@@ -25,6 +25,7 @@ GameState *createGameState() {
     gameState->networkState = createNetworkState();
 
     gameState->linesToRecieve = 0;
+    gameState->combo = 0;
     
     return gameState;
 }

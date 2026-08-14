@@ -128,7 +128,8 @@ void pollNetworkEvents(GameState *gameState) {
                         printf("Recieved line sends\n");
                         int linesSent;
                         memcpy(&linesSent, payload, payloadSize);
-                        recieveLines(gameState, linesSent);
+                        gameState->linesToRecieve += linesSent;
+                        //recieveLines(gameState, linesSent);
                     default:
                         printf("Unknown channel: %d\n", event.channelID);
                 }

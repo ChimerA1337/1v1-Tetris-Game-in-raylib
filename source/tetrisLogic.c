@@ -291,7 +291,10 @@ int clearLines(GameState *gameState) {
             lineCount++;
         }
     }
-    if(lineCount > 0) printf("\ncleared %d lines.", lineCount);
+    if(lineCount > 0) {
+        printf("\ncleared %d lines.", lineCount);
+        gameState->combo++;
+    }
     sendLinesNet(gameState, lineCount);
     return lineCount;
 }

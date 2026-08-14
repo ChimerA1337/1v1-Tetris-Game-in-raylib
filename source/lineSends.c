@@ -7,13 +7,15 @@
 #include <stdio.h>
 
 
-void recieveLines(GameState *gameState, int lineCount) {
+void recieveLines(GameState *gameState) {
     int ignoredColumn = rand() % (gameState->settings->GridWidth);
-    for(int i = 0; i < lineCount; i++) {
+    for(int i = 0; i < gameState->linesToRecieve; i++) {
         recieveLine(gameState, ignoredColumn);
     }
-    if(lineCount > 0)
+    if(gameState->linesToRecieve > 0) {
         printf("The ignored col: %d\n", ignoredColumn);
+        gameState->linesToRecieve = 0;
+    }
 }
 
 void recieveLine(GameState *gameState, int ignoredColumn) {
@@ -33,4 +35,8 @@ void recieveLine(GameState *gameState, int ignoredColumn) {
             getBlock(board, j, settings->GridHeight-1)->occupied = true;
         }
     }
+}
+
+int lineSendCalculation(GameState *gameState) {
+
 }

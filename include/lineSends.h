@@ -3,7 +3,9 @@
 
 #include "gameState.h"
 
-void recieveLines(GameState *gameState, int lineCount);
+void recieveLines(GameState *gameState);
 void recieveLine(GameState *gameState, int ignoredColumn);
+
+int lineSendCalculation(GameState *gameState);
 
 #endif
