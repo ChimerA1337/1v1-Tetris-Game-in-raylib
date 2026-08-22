@@ -8,3 +8,4 @@ tetris game123
 1. run the "tetorisu-windows" file.
 ### MacOS
 1. run the "tetorisu-macos" file.   
+

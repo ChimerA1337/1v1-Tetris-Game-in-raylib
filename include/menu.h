@@ -3,6 +3,7 @@
 
 #include "board.h"
 #include "network.h"
+#include <enet/enet.h>
 
 typedef struct GameState GameState;
 typedef struct MultiplayerMenu MultiplayerMenu;

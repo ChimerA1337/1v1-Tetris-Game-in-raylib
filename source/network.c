@@ -33,18 +33,30 @@ NetworkState *createNetworkState() {
 
 void createHost(NetworkState *networkState) {
     networkState->player = server;
+    
+    printf("DEBUG: Starting createHost()\n");
+    fflush(stdout);
 
     ENetAddress address;
     address.host = ENET_HOST_ANY;
     address.port = 9000;
 
+    printf("DEBUG: Calling enet_host_create()...\n");
+    fflush(stdout);
+
     networkState->host = enet_host_create(&address, 1, 1, 0, 0);
+    
+    printf("DEBUG: enet_host_create() returned: %p\n", (void*)networkState->host);
+    fflush(stdout);
+
     if (networkState->host == NULL) {
-        fprintf(stderr, "Failed to create ENet host\n");
+        fprintf(stderr, "FAILED: enet_host_create() returned NULL\n");
+        fflush(stderr);
         exit(1);
     }
 
-    printf("Server listening on port 9000...\n");
+    printf("DEBUG: Server created, listening on port 9000\n");
+    fflush(stdout);
 }
 
 void createClient(NetworkState *networkState, const char *ipString) {
